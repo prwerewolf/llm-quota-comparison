@@ -2,7 +2,10 @@
 
 ## 1. Where We Stand
 - **Core System**: Self-contained client-side web application (`index.html`) implementing the Non-API Model & Quota Comparator.
-- **Model Coverage**: 20 model variations across Google (Gemini 3.8/3.7/3.6 Flash High & Low), Anthropic (Claude Opus 5.5, Opus 5, Sonnet 5, Fable 5.1 Standard & Reasoning), and OpenAI (GPT-6 Sol, Astra, Terra Standard & Reasoning).
+- **Model Coverage**: 22 model variations across Google (Gemini 3.8/3.7/3.6 Flash High & Low, Gemini 3.1 Pro High & Low), Anthropic (Claude Opus 5.5, Opus 5, Sonnet 5, Fable 5.1 Standard & Reasoning), and OpenAI (GPT-6 Sol, Astra, Terra Standard & Reasoning).
+- **Accurate 2026 Limits**: 
+  - Verified and updated Claude Opus 5.5, Sonnet 5, and Fable 5.1 to 1,000,000 token context window and 128k output.
+  - Verified and updated GPT-6 Sol, Astra, and Terra to 1,050,000 token context window and 128k output.
 - **Subscription Multipliers**: Accurate live 2026 pricing and quota multipliers for:
   - Google: Free ($0), Plus ($4.99), Pro ($19.99), Ultra 5x ($100), Ultra 20x ($200), Enterprise ($35).
   - Anthropic: Free ($0), Pro ($20), Team ($30), Max 5x ($100), Max 20x ($200).
