@@ -209,7 +209,7 @@
 
       <div class="bg-[var(--card)] border border-[var(--border)] rounded-lg p-2.5 px-4 flex items-center justify-between text-xs">
         <span class="text-[var(--muted-foreground)]">Requested Models:</span>
-        <span class="font-mono font-bold text-blue-400" id="model-count-label">20 Models Loaded</span>
+        <span class="font-mono font-bold text-blue-400" id="model-count-label">22 Models Loaded</span>
       </div>
     </div>
 
@@ -309,7 +309,7 @@
       <div class="flex items-center justify-between">
         <div>
           <h2 class="text-base font-bold">Complete Non-API Model Ledger (Plan-Adjusted Quotas)</h2>
-          <p class="text-xs text-[var(--muted-foreground)]">Direct reference for all 20 models scaled to your active plan selection</p>
+          <p class="text-xs text-[var(--muted-foreground)]">Direct reference for all 22 models scaled to your active plan selection</p>
         </div>
         <span class="text-xs font-mono text-[var(--muted-foreground)]">Live Synced to Selected Plans</span>
       </div>
@@ -494,6 +494,38 @@
     const baseModels = [
       // 1. Google Gemini in Antigravity
       {
+        id: "gemini-3.1-pro-high",
+        name: "Gemini 3.1 Pro (High)",
+        provider: "Google",
+        category: "Reasoning",
+        platform: "Antigravity / Google AI Studio",
+        baseRolling5h: 1800000,
+        baseWeeklyCap: 12000000,
+        baseTurns5h: 40,
+        contextWindow: "1,048,576 tokens (1M)",
+        maxOutput: "65,536 tokens",
+        thinkingOverhead: "HIGH: Deep iterative planning & verification. Consumes 8k-32k thinking tokens/step directly from output budget.",
+        resetRule: "Continuous 5-hour rolling refresh window.",
+        badgeColor: "bg-blue-600/10 text-blue-500 border-blue-600/20",
+        notes: "Extremely reliable for long-context complex agent workflows."
+      },
+      {
+        id: "gemini-3.1-pro-low",
+        name: "Gemini 3.1 Pro (Low)",
+        provider: "Google",
+        category: "Standard/Low",
+        platform: "Antigravity / Google AI Studio",
+        baseRolling5h: 4500000,
+        baseWeeklyCap: 25000000,
+        baseTurns5h: 100,
+        contextWindow: "1,048,576 tokens (1M)",
+        maxOutput: "65,536 tokens",
+        thinkingOverhead: "LOW: Standard inference without heavy recursive loops.",
+        resetRule: "Continuous 5-hour rolling refresh window.",
+        badgeColor: "bg-blue-600/10 text-blue-500 border-blue-600/20",
+        notes: "Excellent value for very large context parsing and bulk document tasks."
+      },
+      {
         id: "gemini-3.8-flash-high",
         name: "Gemini 3.8 Flash (High)",
         provider: "Google",
@@ -600,8 +632,8 @@
         baseRolling5h: 450000,
         baseWeeklyCap: 2500000,
         baseTurns5h: 55,
-        contextWindow: "200,000 tokens (500k in Max)",
-        maxOutput: "16,384 tokens",
+        contextWindow: "1,000,000 tokens (1M)",
+        maxOutput: "128,000 tokens",
         thinkingOverhead: "STANDARD: Highly concise and token-efficient. Stretches ~25% further than Opus 5.",
         resetRule: "Rolling 5-hour window + Banked Rate-Limit Reset (save 1-2 resets to trigger on demand).",
         badgeColor: "bg-purple-500/10 text-purple-400 border-purple-500/20",
@@ -616,8 +648,8 @@
         baseRolling5h: 280000,
         baseWeeklyCap: 1500000,
         baseTurns5h: 30,
-        contextWindow: "200,000 tokens (500k in Max)",
-        maxOutput: "16,384 tokens",
+        contextWindow: "1,000,000 tokens (1M)",
+        maxOutput: "128,000 tokens",
         thinkingOverhead: "REASONING: Adaptive thinking enabled. Dynamically scales thinking tokens based on puzzle complexity.",
         resetRule: "Rolling 5-hour session budget + Banked Rate-Limit Reset.",
         badgeColor: "bg-purple-500/10 text-purple-400 border-purple-500/20",
@@ -664,8 +696,8 @@
         baseRolling5h: 900000,
         baseWeeklyCap: 6000000,
         baseTurns5h: 100,
-        contextWindow: "200,000 tokens",
-        maxOutput: "8,192 tokens",
+        contextWindow: "1,000,000 tokens (1M)",
+        maxOutput: "128,000 tokens",
         thinkingOverhead: "STANDARD: Very fast and quota-generous. Default daily driver.",
         resetRule: "Rolling 5-hour window.",
         badgeColor: "bg-indigo-500/10 text-indigo-400 border-indigo-500/20",
@@ -680,8 +712,8 @@
         baseRolling5h: 550000,
         baseWeeklyCap: 3500000,
         baseTurns5h: 50,
-        contextWindow: "200,000 tokens",
-        maxOutput: "8,192 tokens",
+        contextWindow: "1,000,000 tokens (1M)",
+        maxOutput: "128,000 tokens",
         thinkingOverhead: "ADAPTIVE: Smart thinking enabled by default. Automatically scales back thinking tokens on easy prompts.",
         resetRule: "Rolling 5-hour window.",
         badgeColor: "bg-indigo-500/10 text-indigo-400 border-indigo-500/20",
@@ -696,8 +728,8 @@
         baseRolling5h: 320000,
         baseWeeklyCap: 1600000,
         baseTurns5h: 35,
-        contextWindow: "256,000 tokens",
-        maxOutput: "16,384 tokens",
+        contextWindow: "1,000,000 tokens (1M)",
+        maxOutput: "128,000 tokens",
         thinkingOverhead: "STANDARD: Frontier long-horizon agent. Token-hungry if allowed to rewrite entire files.",
         resetRule: "Rolling 5-hour window.",
         badgeColor: "bg-fuchsia-500/10 text-fuchsia-400 border-fuchsia-500/20",
@@ -712,8 +744,8 @@
         baseRolling5h: 200000,
         baseWeeklyCap: 1000000,
         baseTurns5h: 18,
-        contextWindow: "256,000 tokens",
-        maxOutput: "16,384 tokens",
+        contextWindow: "1,000,000 tokens (1M)",
+        maxOutput: "128,000 tokens",
         thinkingOverhead: "DEEP AGENTIC: Extreme reasoning depth and self-correction loops. Very token intensive.",
         resetRule: "Strict 5-hour rolling cap on Pro. On Max 20x ($200), provides ~4M tokens / 5h (~350 turns).",
         badgeColor: "bg-fuchsia-500/10 text-fuchsia-400 border-fuchsia-500/20",
@@ -730,8 +762,8 @@
         baseRolling5h: 1200000,
         baseWeeklyCap: 8500000,
         baseTurns5h: 95,
-        contextWindow: "500,000 tokens",
-        maxOutput: "32,768 tokens",
+        contextWindow: "1,050,000 tokens",
+        maxOutput: "128,000 tokens",
         thinkingOverhead: "STANDARD: Highly optimized, 50% lower cost architecture than GPT-5.6 predecessors.",
         resetRule: "Dynamic 3-5 hour rate limit reset. Virtually uncapped on ChatGPT Pro ($200/mo).",
         badgeColor: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
@@ -746,8 +778,8 @@
         baseRolling5h: 650000,
         baseWeeklyCap: 4000000,
         baseTurns5h: 40,
-        contextWindow: "500,000 tokens",
-        maxOutput: "32,768 tokens",
+        contextWindow: "1,050,000 tokens",
+        maxOutput: "128,000 tokens",
         thinkingOverhead: "HIGH: Deep chain-of-thought verification. Reasoning tokens count towards prompt/completion cap.",
         resetRule: "Dynamic 3-5 hour reset. Pro tier provides ~5x-20x headroom.",
         badgeColor: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
@@ -763,7 +795,7 @@
         baseWeeklyCap: 2800000,
         baseTurns5h: 40,
         contextWindow: "1,050,000 tokens (1.05M)",
-        maxOutput: "65,536 tokens",
+        maxOutput: "128,000 tokens",
         thinkingOverhead: "STANDARD: Flagship frontier model. Large base compute footprint.",
         resetRule: "Strict 5-hour rolling cap on Plus; Pro tier ($200) grants high priority unthrottled access.",
         badgeColor: "bg-amber-500/10 text-amber-400 border-amber-500/20",
@@ -779,7 +811,7 @@
         baseWeeklyCap: 1500000,
         baseTurns5h: 20,
         contextWindow: "1,050,000 tokens (1.05M)",
-        maxOutput: "65,536 tokens",
+        maxOutput: "128,000 tokens",
         thinkingOverhead: "EXTREME: Full computer-use planning and visual inspection tokens. Heavy token draw per step.",
         resetRule: "Fastest model to trigger 5-hour Plus caps. Pro $200 tier expands quota 20x to ~7.0M tokens.",
         badgeColor: "bg-amber-500/10 text-amber-400 border-amber-500/20",
@@ -794,8 +826,8 @@
         baseRolling5h: 800000,
         baseWeeklyCap: 4500000,
         baseTurns5h: 75,
-        contextWindow: "256,000 tokens",
-        maxOutput: "16,384 tokens",
+        contextWindow: "1,050,000 tokens",
+        maxOutput: "128,000 tokens",
         thinkingOverhead: "STANDARD: Mid-tier speed model evolved from GPT-5.6 Terra architecture.",
         resetRule: "Standard 3-5 hour reset interval.",
         badgeColor: "bg-orange-500/10 text-orange-400 border-orange-500/20",
@@ -810,8 +842,8 @@
         baseRolling5h: 450000,
         baseWeeklyCap: 2500000,
         baseTurns5h: 35,
-        contextWindow: "256,000 tokens",
-        maxOutput: "16,384 tokens",
+        contextWindow: "1,050,000 tokens",
+        maxOutput: "128,000 tokens",
         thinkingOverhead: "MODERATE: Step-by-step thinking for math and code verification.",
         resetRule: "Standard 3-5 hour reset interval.",
         badgeColor: "bg-orange-500/10 text-orange-400 border-orange-500/20",

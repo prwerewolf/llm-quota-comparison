@@ -82,6 +82,8 @@ The table below shows effective 5-hour rolling allowances across **Standard (\$2
 
 | Model Variation | Standard / Pro / Plus (\$20/mo) | Power Tier (\$100/mo - 5x) | Top Frontier Tier (\$200/mo - 20x) |
 | :--- | :--- | :--- | :--- |
+| **Gemini 3.1 Pro (High)** | ~1.8M tok (~40 turns) [AI Pro] | ~9.0M tok (~200 turns) [Ultra $100] | **~36.0M tok (~800 turns)** [Ultra $200] |
+| **Gemini 3.1 Pro (Low)** | ~4.5M tok (~100 turns) [AI Pro] | ~22.5M tok (~500 turns) [Ultra $100] | **~90.0M tok (~2,000 turns)** [Ultra $200] |
 | **Gemini 3.8 Flash (High)** | ~1.4M tok (~25 turns) [AI Pro] | ~7.0M tok (~125 turns) [Ultra \$100] | **~28.0M tok (~500 turns)** [Ultra \$200] |
 | **Gemini 3.8 Flash (Low)** | ~3.5M tok (~85 turns) [AI Pro] | ~17.5M tok (~425 turns) [Ultra \$100] | **~70.0M tok (~1,700 turns)** [Ultra \$200] |
 | **Gemini 3.7 Flash (High)** | ~1.6M tok (~35 turns) [AI Pro] | ~8.0M tok (~175 turns) [Ultra \$100] | **~32.0M tok (~700 turns)** [Ultra \$200] |
