@@ -41,3 +41,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Added "🏆 BEST" dynamic highlighting to the Head-to-Head Compare table. The view now automatically calculates and highlights the top-scoring model for each of the 6 Vibe Coding evaluation metrics, dimming the losing scores to make comparisons instantly readable.
+
+## [1.4.1] - 2026-09-25
+
+### Changed
+- Improved the Head-to-Head Compare metric highlighting. Instead of a text badge, the entire winning table cell now illuminates with an amber background tint and inner border, making the winning model significantly easier to identify at a glance.

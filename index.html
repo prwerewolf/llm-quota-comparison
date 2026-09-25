@@ -1441,9 +1441,11 @@
         const val = m[key];
         const maxVal = Math.max(m1[key], m2[key], m3[key]);
         const isWinner = val === maxVal;
-        const badge = isWinner ? `<span class="ml-2 inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20 shadow-sm leading-none tracking-wide">🏆 BEST</span>` : '';
         const weightClass = isWinner ? 'font-black opacity-100' : 'font-semibold opacity-60';
-        return `<div class="flex items-center mt-1"><strong class="${colorClass} text-sm ${weightClass}">${val}${unit}</strong>${badge}</div><div class="text-[10px] text-[var(--muted-foreground)] mt-0.5">${label}</div>`;
+        return {
+          content: `<div class="flex items-center mt-1"><strong class="${colorClass} text-sm ${weightClass}">${val}${unit}</strong></div><div class="text-[10px] text-[var(--muted-foreground)] mt-0.5">${label}</div>`,
+          isWinner: isWinner
+        };
       };
 
       const metrics = [
@@ -1464,14 +1466,27 @@
       ];
 
       const tbody = document.getElementById("compare-table-body");
-      tbody.innerHTML = metrics.map(row => `
+      tbody.innerHTML = metrics.map(row => {
+        const r1 = row.f(m1);
+        const r2 = row.f(m2);
+        const r3 = row.f(m3);
+        
+        const getTd = (r, isLast=false) => {
+           const content = typeof r === 'string' ? r : r.content;
+           const bgClass = typeof r === 'object' && r.isWinner ? 'bg-amber-500/10 shadow-[inset_0_0_0_1px_rgba(245,158,11,0.25)]' : '';
+           const borderClass = isLast ? '' : 'border-r border-[var(--border)]';
+           return `<td class="p-3 align-top transition-colors ${borderClass} ${bgClass}">${content}</td>`;
+        };
+        
+        return `
         <tr class="hover:bg-[var(--background)]/40 transition">
           <td class="p-3 font-semibold text-[var(--foreground)] border-r border-[var(--border)] align-top">${row.label}</td>
-          <td class="p-3 align-top border-r border-[var(--border)]">${row.f(m1)}</td>
-          <td class="p-3 align-top border-r border-[var(--border)]">${row.f(m2)}</td>
-          <td class="p-3 align-top">${row.f(m3)}</td>
+          ${getTd(r1)}
+          ${getTd(r2)}
+          ${getTd(r3, true)}
         </tr>
-      `).join("");
+        `;
+      }).join("");
     }
 
     // Render Master Ledger
