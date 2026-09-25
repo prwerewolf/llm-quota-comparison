@@ -30,3 +30,9 @@ All notable changes to this project will be documented in this file.
 - Models now display SWE-bench Verified (Agentic Autonomy), Chatbot Arena Coding Elo (Human Preference), and Aider Code Editing (Refactor Pass Rate).
 - Dedicated "Vibe Coding Industry Evals" UI component in the model inspector.
 - Head-to-Head Compare view and Master Ledger table now include eval metrics.
+
+## [1.3.0] - 2026-09-25
+
+### Added
+- Integrated Instruction Following (IFEval), Context Recall (NIAH), and LiveCodeBench scores into the model comparator.
+- Added explanatory hover tooltips (using native `title` and CSS dashed underlines) to all 6 Vibe Coding evaluation metrics in the Inspector and Compare views.
