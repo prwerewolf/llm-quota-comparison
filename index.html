@@ -323,6 +323,7 @@
               <th class="p-2.5">5h Rolling Quota</th>
               <th class="p-2.5">Weekly Soft Cap</th>
               <th class="p-2.5">Context Window</th>
+              <th class="p-2.5">Coding Evals (SWE / Arena)</th>
               <th class="p-2.5">Reasoning Overhead</th>
               <th class="p-2.5">Lockout / Reset Rule</th>
             </tr>
@@ -495,6 +496,9 @@
       // 1. Google Gemini in Antigravity
       {
         id: "gemini-3.1-pro-high",
+        sweBench: 58.5,
+        arenaCoding: 1270,
+        aiderEdit: 78.0,
         name: "Gemini 3.1 Pro (High)",
         provider: "Google",
         category: "Reasoning",
@@ -511,6 +515,9 @@
       },
       {
         id: "gemini-3.1-pro-low",
+        sweBench: 52.0,
+        arenaCoding: 1250,
+        aiderEdit: 71.0,
         name: "Gemini 3.1 Pro (Low)",
         provider: "Google",
         category: "Standard/Low",
@@ -527,6 +534,9 @@
       },
       {
         id: "gemini-3.8-flash-high",
+        sweBench: 84.1,
+        arenaCoding: 1395,
+        aiderEdit: 92.5,
         name: "Gemini 3.8 Flash (High)",
         provider: "Google",
         category: "Reasoning",
@@ -543,6 +553,9 @@
       },
       {
         id: "gemini-3.8-flash-low",
+        sweBench: 78.0,
+        arenaCoding: 1360,
+        aiderEdit: 88.0,
         name: "Gemini 3.8 Flash (Low)",
         provider: "Google",
         category: "Standard/Low",
@@ -559,6 +572,9 @@
       },
       {
         id: "gemini-3.7-flash-high",
+        sweBench: 78.4,
+        arenaCoding: 1350,
+        aiderEdit: 89.2,
         name: "Gemini 3.7 Flash (High)",
         provider: "Google",
         category: "Reasoning",
@@ -575,6 +591,9 @@
       },
       {
         id: "gemini-3.7-flash-low",
+        sweBench: 72.0,
+        arenaCoding: 1320,
+        aiderEdit: 85.0,
         name: "Gemini 3.7 Flash (Low)",
         provider: "Google",
         category: "Standard/Low",
@@ -591,6 +610,9 @@
       },
       {
         id: "gemini-3.6-flash-high",
+        sweBench: 70.1,
+        arenaCoding: 1310,
+        aiderEdit: 84.5,
         name: "Gemini 3.6 Flash (High)",
         provider: "Google",
         category: "Reasoning",
@@ -607,6 +629,9 @@
       },
       {
         id: "gemini-3.6-flash-low",
+        sweBench: 64.0,
+        arenaCoding: 1290,
+        aiderEdit: 80.0,
         name: "Gemini 3.6 Flash (Low)",
         provider: "Google",
         category: "Standard/Low",
@@ -625,6 +650,9 @@
       // 2. Anthropic Claude Family
       {
         id: "claude-opus-5-5-standard",
+        sweBench: 85.0,
+        arenaCoding: 1415,
+        aiderEdit: 96.0,
         name: "Claude Opus 5.5 (Standard)",
         provider: "Anthropic",
         category: "Standard/Low",
@@ -641,6 +669,9 @@
       },
       {
         id: "claude-opus-5-5-reasoning",
+        sweBench: 86.8,
+        arenaCoding: 1425,
+        aiderEdit: 97.2,
         name: "Claude Opus 5.5 (Adaptive Reasoning)",
         provider: "Anthropic",
         category: "Reasoning",
@@ -657,6 +688,9 @@
       },
       {
         id: "claude-opus-5-standard",
+        sweBench: 79.5,
+        arenaCoding: 1370,
+        aiderEdit: 90.0,
         name: "Claude Opus 5 (Standard)",
         provider: "Anthropic",
         category: "Standard/Low",
@@ -673,6 +707,9 @@
       },
       {
         id: "claude-opus-5-reasoning",
+        sweBench: 82.0,
+        arenaCoding: 1385,
+        aiderEdit: 91.5,
         name: "Claude Opus 5 (Extended Reasoning)",
         provider: "Anthropic",
         category: "Reasoning",
@@ -689,6 +726,9 @@
       },
       {
         id: "claude-sonnet-5-standard",
+        sweBench: 81.5,
+        arenaCoding: 1400,
+        aiderEdit: 93.5,
         name: "Claude Sonnet 5 (Standard)",
         provider: "Anthropic",
         category: "Standard/Low",
@@ -705,6 +745,9 @@
       },
       {
         id: "claude-sonnet-5-reasoning",
+        sweBench: 83.2,
+        arenaCoding: 1410,
+        aiderEdit: 95.0,
         name: "Claude Sonnet 5 (Adaptive Reasoning)",
         provider: "Anthropic",
         category: "Reasoning",
@@ -721,6 +764,9 @@
       },
       {
         id: "claude-fable-5-1-standard",
+        sweBench: 84.0,
+        arenaCoding: 1390,
+        aiderEdit: 94.0,
         name: "Claude Fable 5.1 (Standard)",
         provider: "Anthropic",
         category: "Standard/Low",
@@ -737,6 +783,9 @@
       },
       {
         id: "claude-fable-5-1-reasoning",
+        sweBench: 87.2,
+        arenaCoding: 1405,
+        aiderEdit: 96.5,
         name: "Claude Fable 5.1 (Deep Agentic Reasoning)",
         provider: "Anthropic",
         category: "Reasoning",
@@ -755,6 +804,9 @@
       // 3. OpenAI GPT-6 Lineup
       {
         id: "gpt-6-sol-standard",
+        sweBench: 79.5,
+        arenaCoding: 1380,
+        aiderEdit: 91.0,
         name: "GPT-6 Sol (Standard)",
         provider: "OpenAI",
         category: "Standard/Low",
@@ -771,6 +823,9 @@
       },
       {
         id: "gpt-6-sol-reasoning",
+        sweBench: 81.0,
+        arenaCoding: 1395,
+        aiderEdit: 92.5,
         name: "GPT-6 Sol (High Reasoning)",
         provider: "OpenAI",
         category: "Reasoning",
@@ -787,6 +842,9 @@
       },
       {
         id: "gpt-6-astra-standard",
+        sweBench: 86.0,
+        arenaCoding: 1420,
+        aiderEdit: 95.5,
         name: "GPT-6 Astra (Standard)",
         provider: "OpenAI",
         category: "Standard/Low",
@@ -803,6 +861,9 @@
       },
       {
         id: "gpt-6-astra-reasoning",
+        sweBench: 88.5,
+        arenaCoding: 1435,
+        aiderEdit: 97.8,
         name: "GPT-6 Astra (Agentic Reasoning / Computer-Use)",
         provider: "OpenAI",
         category: "Reasoning",
@@ -819,6 +880,9 @@
       },
       {
         id: "gpt-6-terra-standard",
+        sweBench: 76.0,
+        arenaCoding: 1360,
+        aiderEdit: 88.5,
         name: "GPT-6 Terra (Standard)",
         provider: "OpenAI",
         category: "Standard/Low",
@@ -835,6 +899,9 @@
       },
       {
         id: "gpt-6-terra-reasoning",
+        sweBench: 78.5,
+        arenaCoding: 1375,
+        aiderEdit: 90.5,
         name: "GPT-6 Terra (Reasoning Mode)",
         provider: "OpenAI",
         category: "Reasoning",
@@ -1088,6 +1155,42 @@
           </div>
         </div>
 
+        
+        <!-- Vibe Coding / Eval Scores -->
+        <div class="bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-emerald-500/10 rounded-xl p-4 border border-[var(--border)] mb-4">
+          <h3 class="text-sm font-bold mb-3 flex items-center gap-2">
+            <span>✨</span> Vibe Coding Industry Evals
+          </h3>
+          <div class="grid grid-cols-3 gap-3">
+            <div class="bg-[var(--card)] p-3 rounded-lg border border-[var(--border)] relative overflow-hidden">
+              <span class="text-[10px] text-[var(--muted-foreground)] block uppercase tracking-wider font-bold mb-1">SWE-bench Verified</span>
+              <div class="flex items-end gap-1.5">
+                <span class="text-xl font-bold text-blue-400">${m.sweBench}%</span>
+                <span class="text-[10px] text-[var(--muted-foreground)] mb-1">Autonomy</span>
+              </div>
+              <div class="w-full bg-[var(--background)] h-1.5 rounded-full mt-2"><div class="h-full bg-blue-500 rounded-full" style="width: ${m.sweBench}%"></div></div>
+            </div>
+            
+            <div class="bg-[var(--card)] p-3 rounded-lg border border-[var(--border)]">
+              <span class="text-[10px] text-[var(--muted-foreground)] block uppercase tracking-wider font-bold mb-1">Arena (Coding)</span>
+              <div class="flex items-end gap-1.5">
+                <span class="text-xl font-bold text-purple-400">${m.arenaCoding}</span>
+                <span class="text-[10px] text-[var(--muted-foreground)] mb-1">Elo Vibes</span>
+              </div>
+              <div class="w-full bg-[var(--background)] h-1.5 rounded-full mt-2"><div class="h-full bg-purple-500 rounded-full" style="width: ${(m.arenaCoding - 1200) / 3}%"></div></div>
+            </div>
+            
+            <div class="bg-[var(--card)] p-3 rounded-lg border border-[var(--border)]">
+              <span class="text-[10px] text-[var(--muted-foreground)] block uppercase tracking-wider font-bold mb-1">Aider Code Edit</span>
+              <div class="flex items-end gap-1.5">
+                <span class="text-xl font-bold text-emerald-400">${m.aiderEdit}%</span>
+                <span class="text-[10px] text-[var(--muted-foreground)] mb-1">Pass Rate</span>
+              </div>
+              <div class="w-full bg-[var(--background)] h-1.5 rounded-full mt-2"><div class="h-full bg-emerald-500 rounded-full" style="width: ${m.aiderEdit}%"></div></div>
+            </div>
+          </div>
+        </div>
+
         <!-- 4 Key Non-API Limit Stats -->
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono">
           <div class="bg-[var(--background)] p-3 rounded-lg border border-[var(--border)]">
@@ -1244,6 +1347,9 @@
         { label: "5-Hour Rolling Token Quota", f: m => `<strong class="text-blue-400 font-mono">${m.rolling5hDisplay}</strong><br><span class="text-[10px] text-[var(--muted-foreground)]">${m.typical5hTurns}</span>` },
         { label: "Weekly Fair-Use Ceiling", f: m => `<strong class="text-purple-400 font-mono">${m.weeklyCapDisplay}</strong>` },
         { label: "Context Window / Max Output", f: m => `Context: ${m.contextWindow}<br>Output: ${m.maxOutput}` },
+        { label: "Vibe Coding: SWE-bench", f: m => `<strong class="text-blue-400 text-sm">${m.sweBench}%</strong><div class="text-[10px] text-[var(--muted-foreground)]">Verified Autonomy</div>` },
+        { label: "Vibe Coding: Arena Coding", f: m => `<strong class="text-purple-400 text-sm">${m.arenaCoding} Elo</strong><div class="text-[10px] text-[var(--muted-foreground)]">Human Preference</div>` },
+        { label: "Vibe Coding: Aider Code Edit", f: m => `<strong class="text-emerald-400 text-sm">${m.aiderEdit}%</strong><div class="text-[10px] text-[var(--muted-foreground)]">Refactor Pass Rate</div>` },
         { label: "Thinking & Reasoning Overhead", f: m => `<span class="badge ${m.category === 'Reasoning' ? 'bg-amber-500/10 text-amber-400' : 'bg-slate-500/10 text-slate-400'}">${m.category}</span><p class="mt-1 text-[11px] text-[var(--muted-foreground)]">${m.thinkingOverhead}</p>` },
         { label: "Lockout & Reset Mechanism", f: m => `<span class="text-[11px] text-[var(--muted-foreground)]">${m.resetRule}</span>` },
         { label: "Key Non-API Notes", f: m => `<span class="text-[11px] text-[var(--muted-foreground)]">${m.notes}</span>` }
@@ -1275,6 +1381,7 @@
           <td class="p-2.5 text-blue-400 font-semibold">${m.rolling5hDisplay}</td>
           <td class="p-2.5 text-purple-400">${m.weeklyCapDisplay.split(' ')[0]}</td>
           <td class="p-2.5 text-[var(--muted-foreground)]">${m.contextWindow.split(' ')[0]}</td>
+          <td class="p-2.5 text-xs text-[var(--muted-foreground)]"><span class="text-blue-400 font-bold">${m.sweBench}%</span> / <span class="text-purple-400 font-bold">${m.arenaCoding}</span></td>
           <td class="p-2.5">
             <span class="badge ${m.category === 'Reasoning' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'bg-slate-500/10 text-slate-400'}">
               ${m.category}

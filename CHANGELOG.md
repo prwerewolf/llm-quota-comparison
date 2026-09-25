@@ -22,3 +22,11 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Corrected late 2026 model limits based on live data (Opus 5.5, Sonnet 5, Fable 5.1 context updated to 1M with 128k output).
 - Corrected GPT-6 models (Sol, Astra, Terra) context updated to 1.05M with 128k output.
+
+## [1.2.0] - 2026-09-25
+
+### Added
+- Vibe Coding Evaluation Scores integrated into model comparison.
+- Models now display SWE-bench Verified (Agentic Autonomy), Chatbot Arena Coding Elo (Human Preference), and Aider Code Editing (Refactor Pass Rate).
+- Dedicated "Vibe Coding Industry Evals" UI component in the model inspector.
+- Head-to-Head Compare view and Master Ledger table now include eval metrics.
