@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Non-API Model & Quota Comparator (Standalone Edition)</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    :root {
+      --background: #0f172a;
+      --card: #1e293b;
+      --border: #334155;
+      --foreground: #f8fafc;
+      --muted-foreground: #94a3b8;
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --background: #f8fafc;
+        --card: #ffffff;
+        --border: #e2e8f0;
+        --foreground: #0f172a;
+        --muted-foreground: #64748b;
+      }
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--card);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 3px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.15rem 0.5rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.025em;
+    }
+  </style>
+</head>
+<body class="bg-[var(--background)] text-[var(--foreground)] antialiased p-4 sm:p-6 lg:p-8 min-h-screen">
+  <div class="max-w-7xl mx-auto space-y-6">
+
+    <!-- Header Section -->
+    <header class="border-b border-[var(--border)] pb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div>
+        <div class="flex items-center gap-3">
+          <div class="p-2.5 rounded-xl bg-blue-500/10 text-blue-500 border border-blue-500/20 font-mono text-2xl font-bold">
+            ⚡
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h1 class="text-2xl sm:text-3xl font-bold tracking-tight">Non-API AI Model & Quota Comparator</h1>
+              <span class="badge bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px]">
+                💾 Auto-Saved Locally
+              </span>
+            </div>
+            <p class="text-sm text-[var(--muted-foreground)] mt-1">
+              Permanent Standalone App: <strong>Google AI Pro/Ultra</strong>, <strong>Claude Pro/Max ($200)</strong>, <strong>ChatGPT Plus/Pro ($200)</strong>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <button onclick="resetDefaults()" title="Reset all settings to default" class="px-2.5 py-1.5 text-xs text-[var(--muted-foreground)] hover:text-[var(--foreground)] border border-[var(--border)] rounded-lg hover:bg-[var(--card)] transition">
+          ↺ Reset
+        </button>
+        <button id="toggle-view-btn" onclick="toggleMainView()" class="px-3 py-1.5 text-xs font-semibold rounded-lg border border-blue-500/30 bg-blue-600/10 text-blue-400 hover:bg-blue-600/20 transition">
+          Head-to-Head Compare
+        </button>
+      </div>
+    </header>
+
+    <!-- Comprehensive Provider Subscription Plan Bar -->
+    <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-5 shadow-sm space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[var(--border)] pb-3">
+        <div class="flex items-center gap-2">
+          <span class="text-lg">💳</span>
+          <div>
+            <h2 class="text-sm font-bold tracking-wide uppercase">Your Active Subscription Plans</h2>
+            <p class="text-xs text-[var(--muted-foreground)]">Selections are automatically saved to your browser's local storage</p>
+          </div>
+        </div>
+
+        <!-- Quick 1-Click Plan Presets -->
+        <div class="flex flex-wrap items-center gap-1.5 text-xs font-medium">
+          <span class="text-[var(--muted-foreground)] text-[11px] mr-1">Presets:</span>
+          <button onclick="applyPreset('max200')" class="px-2.5 py-1 rounded bg-purple-600 text-white font-semibold shadow-sm hover:bg-purple-500 transition">
+            ★ Top $200/mo Tier (Max 20x / Ultra $200 / Pro $200)
+          </button>
+          <button onclick="applyPreset('tier100')" class="px-2 py-1 rounded bg-[var(--background)] border border-[var(--border)] hover:border-purple-500 text-[var(--foreground)] transition">
+            $100/mo Tier (Max 5x / Ultra 5x)
+          </button>
+          <button onclick="applyPreset('standard20')" class="px-2 py-1 rounded bg-[var(--background)] border border-[var(--border)] hover:border-blue-500 text-[var(--foreground)] transition">
+            Standard $20/mo (Pro / Plus)
+          </button>
+          <button onclick="applyPreset('team30')" class="px-2 py-1 rounded bg-[var(--background)] border border-[var(--border)] hover:border-emerald-500 text-[var(--foreground)] transition">
+            Team (~$30/mo)
+          </button>
+          <button onclick="applyPreset('free')" class="px-2 py-1 rounded bg-[var(--background)] border border-[var(--border)] hover:border-slate-500 text-[var(--foreground)] transition">
+            Free ($0/mo)
+          </button>
+        </div>
+      </div>
+
+      <!-- 3 Provider Plan Selectors -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+        
+        <!-- Google Plan -->
+        <div class="bg-[var(--background)] p-3.5 rounded-lg border border-[var(--border)] space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold flex items-center gap-1.5 text-blue-400">
+              <span>🔵</span> Google AI Plan
+            </span>
+            <span class="font-mono text-emerald-400 font-bold" id="plan-cost-google">$200.00/mo</span>
+          </div>
+          <select id="plan-select-google" onchange="onPlanChange('Google')" class="w-full px-2.5 py-1.5 rounded bg-[var(--card)] border border-[var(--border)] text-[var(--foreground)] focus:ring-1 focus:ring-blue-500 font-medium">
+            <option value="free">Google AI Free ($0.00/mo)</option>
+            <option value="plus">Google AI Plus ($4.99/mo)</option>
+            <option value="pro">Google AI Pro ($19.99/mo)</option>
+            <option value="ultra_100">Google AI Ultra 5x ($100.00/mo)</option>
+            <option value="ultra_200" selected>Google AI Ultra 20x ($200.00/mo - Top VIP)</option>
+            <option value="enterprise">Antigravity Enterprise ($35.00/user/mo)</option>
+          </select>
+          <p class="text-[11px] text-[var(--muted-foreground)]" id="plan-desc-google">
+            Top-tier VIP Ultra: 20x Pro limits (~28M tokens / 5h on Flash High), Project Genie, 30 TB storage, and dedicated Antigravity compute.
+          </p>
+        </div>
+
+        <!-- Anthropic Plan -->
+        <div class="bg-[var(--background)] p-3.5 rounded-lg border border-[var(--border)] space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold flex items-center gap-1.5 text-purple-400">
+              <span>🟣</span> Anthropic Claude Plan
+            </span>
+            <span class="font-mono text-emerald-400 font-bold" id="plan-cost-anthropic">$200.00/mo</span>
+          </div>
+          <select id="plan-select-anthropic" onchange="onPlanChange('Anthropic')" class="w-full px-2.5 py-1.5 rounded bg-[var(--card)] border border-[var(--border)] text-[var(--foreground)] focus:ring-1 focus:ring-purple-500 font-medium">
+            <option value="free">Claude Free ($0.00/mo)</option>
+            <option value="pro">Claude Pro ($20.00/mo)</option>
+            <option value="team">Claude Team ($30.00/user/mo)</option>
+            <option value="max_100">Claude Max 5x ($100.00/mo)</option>
+            <option value="max_200" selected>Claude Max 20x ($200.00/mo - Power User)</option>
+            <option value="enterprise">Claude Enterprise ($Custom)</option>
+          </select>
+          <p class="text-[11px] text-[var(--muted-foreground)]" id="plan-desc-anthropic">
+            Top Power User Tier: 20x Pro capacity (~9M tokens / 5h for Opus 5.5), all-day heavy agentic workflows & Claude Code.
+          </p>
+        </div>
+
+        <!-- OpenAI Plan -->
+        <div class="bg-[var(--background)] p-3.5 rounded-lg border border-[var(--border)] space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold flex items-center gap-1.5 text-emerald-400">
+              <span>🟢</span> OpenAI ChatGPT Plan
+            </span>
+            <span class="font-mono text-emerald-400 font-bold" id="plan-cost-openai">$200.00/mo</span>
+          </div>
+          <select id="plan-select-openai" onchange="onPlanChange('OpenAI')" class="w-full px-2.5 py-1.5 rounded bg-[var(--card)] border border-[var(--border)] text-[var(--foreground)] focus:ring-1 focus:ring-emerald-500 font-medium">
+            <option value="free">ChatGPT Free ($0.00/mo)</option>
+            <option value="plus">ChatGPT Plus ($20.00/mo)</option>
+            <option value="business">ChatGPT Business ($30.00/user/mo)</option>
+            <option value="pro_100">ChatGPT Pro 5x ($100.00/mo)</option>
+            <option value="pro_200" selected>ChatGPT Pro 20x ($200.00/mo - Frontier Tier)</option>
+            <option value="enterprise">ChatGPT Enterprise ($Custom)</option>
+          </select>
+          <p class="text-[11px] text-[var(--muted-foreground)]" id="plan-desc-openai">
+            Frontier Compute Tier: Uncapped Sol & Terra, 20x Astra computer-use limits (~7M tokens / 5h), priority unthrottled access.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Active Total Cost Badge Bar -->
+      <div class="pt-2 border-t border-[var(--border)] flex flex-wrap items-center justify-between text-xs font-mono">
+        <span class="text-[var(--muted-foreground)]">Combined Active Non-API Monthly Cost:</span>
+        <span class="text-sm font-bold text-emerald-400" id="combined-cost-badge">$600.00 / month</span>
+      </div>
+    </div>
+
+    <!-- Navigation & Filter Tabs -->
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
+      <div class="lg:col-span-3 flex flex-wrap items-center gap-2">
+        <div class="relative flex-1 min-w-[200px]">
+          <input type="text" id="search-input" placeholder="Filter models (e.g. Flash High, Opus 5.5, Astra)..." 
+            oninput="handleSearch()"
+            class="w-full px-3.5 py-2 rounded-lg text-sm bg-[var(--card)] border border-[var(--border)] text-[var(--foreground)] placeholder-[var(--muted-foreground)] focus:outline-none focus:ring-2 focus:ring-blue-500/50">
+        </div>
+        
+        <div class="flex items-center gap-1.5 bg-[var(--card)] p-1 rounded-lg border border-[var(--border)] text-xs font-medium">
+          <button onclick="setProviderFilter('all')" class="provider-btn active px-2.5 py-1 rounded bg-blue-600 text-white font-semibold">All</button>
+          <button onclick="setProviderFilter('Google')" class="provider-btn px-2.5 py-1 rounded text-[var(--muted-foreground)] hover:text-[var(--foreground)]">Google</button>
+          <button onclick="setProviderFilter('Anthropic')" class="provider-btn px-2.5 py-1 rounded text-[var(--muted-foreground)] hover:text-[var(--foreground)]">Anthropic</button>
+          <button onclick="setProviderFilter('OpenAI')" class="provider-btn px-2.5 py-1 rounded text-[var(--muted-foreground)] hover:text-[var(--foreground)]">OpenAI</button>
+        </div>
+
+        <div class="flex items-center gap-1.5 bg-[var(--card)] p-1 rounded-lg border border-[var(--border)] text-xs font-medium">
+          <button onclick="setReasoningFilter('all')" class="reason-btn active px-2.5 py-1 rounded bg-blue-600 text-white font-semibold">All Modes</button>
+          <button onclick="setReasoningFilter('Reasoning')" class="reason-btn px-2.5 py-1 rounded text-[var(--muted-foreground)] hover:text-[var(--foreground)]">Reasoning / Thinking</button>
+          <button onclick="setReasoningFilter('Standard/Low')" class="reason-btn px-2.5 py-1 rounded text-[var(--muted-foreground)] hover:text-[var(--foreground)]">Standard / Low</button>
+        </div>
+      </div>
+
+      <div class="bg-[var(--card)] border border-[var(--border)] rounded-lg p-2.5 px-4 flex items-center justify-between text-xs">
+        <span class="text-[var(--muted-foreground)]">Requested Models:</span>
+        <span class="font-mono font-bold text-blue-400" id="model-count-label">20 Models Loaded</span>
+      </div>
+    </div>
+
+    <!-- MAIN VIEW 1: Interactive Browser & Details Panel -->
+    <div id="grid-view" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      
+      <!-- Model List / Cards (Left Column) -->
+      <div class="lg:col-span-5 space-y-3 max-h-[820px] overflow-y-auto pr-1" id="model-cards-container">
+        <!-- Rendered by JS -->
+      </div>
+
+      <!-- Selected Model Inspector (Right Column) -->
+      <div class="lg:col-span-7 space-y-5">
+        <div id="inspector-card" class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-6 shadow-sm space-y-6">
+          <!-- Filled dynamically by selectModel() -->
+        </div>
+
+        <!-- Interactive 5-Hour Workload Simulator -->
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-5 shadow-sm space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="text-sm font-semibold tracking-wide uppercase flex items-center gap-2">
+              <span>🧮</span> Live Plan-Aware 5-Hour Workload Simulator
+            </h3>
+            <span class="text-xs text-[var(--muted-foreground)]" id="sim-model-name">Simulating...</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+            <div>
+              <label class="block font-medium mb-1 text-[var(--muted-foreground)]">Agentic Tasks in 5h Window:</label>
+              <div class="flex items-center gap-2">
+                <input type="range" id="sim-turns" min="1" max="150" value="25" oninput="runSimulation()" class="w-full">
+                <span class="font-mono font-bold w-8 text-right" id="sim-turns-val">25</span>
+              </div>
+            </div>
+
+            <div>
+              <label class="block font-medium mb-1 text-[var(--muted-foreground)]">Average Context Size (Tokens):</label>
+              <div class="flex items-center gap-2">
+                <input type="range" id="sim-ctx" min="5000" max="300000" step="5000" value="50000" oninput="runSimulation()" class="w-full">
+                <span class="font-mono font-bold w-14 text-right" id="sim-ctx-val">50k</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Simulation Results Bar -->
+          <div class="space-y-2 pt-2 border-t border-[var(--border)]">
+            <div class="flex justify-between text-xs font-mono">
+              <span class="text-[var(--muted-foreground)]">Projected 5h Usage: <strong id="sim-tokens-used" class="text-[var(--foreground)]">--</strong></span>
+              <span id="sim-budget-status" class="font-bold">--</span>
+            </div>
+            <div class="w-full bg-[var(--background)] h-2.5 rounded-full overflow-hidden border border-[var(--border)]">
+              <div id="sim-progress-bar" class="h-full bg-blue-500 rounded-full transition-all duration-300" style="width: 25%;"></div>
+            </div>
+            <p class="text-[11px] text-[var(--muted-foreground)]" id="sim-advice">
+              Calculates input context, thinking token overhead, and recursive tool loops against your active plan quota.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN VIEW 2: Head-to-Head Comparison Matrix -->
+    <div id="compare-view" class="hidden space-y-6">
+      <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-5 shadow-sm space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[var(--border)]">
+          <div>
+            <h2 class="text-lg font-bold">Head-to-Head Model Comparison (Active Plans)</h2>
+            <p class="text-xs text-[var(--muted-foreground)]">Compare up to 3 models side-by-side with live limits scaled to your chosen plans</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <select id="slot-1-select" onchange="updateCompareSlots()" class="px-2.5 py-1 text-xs rounded bg-[var(--background)] border border-[var(--border)] text-[var(--foreground)]"></select>
+            <select id="slot-2-select" onchange="updateCompareSlots()" class="px-2.5 py-1 text-xs rounded bg-[var(--background)] border border-[var(--border)] text-[var(--foreground)]"></select>
+            <select id="slot-3-select" onchange="updateCompareSlots()" class="px-2.5 py-1 text-xs rounded bg-[var(--background)] border border-[var(--border)] text-[var(--foreground)]"></select>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-xs text-left border-collapse" id="compare-table">
+            <thead>
+              <tr class="border-b border-[var(--border)] bg-[var(--background)]/50">
+                <th class="p-3 font-semibold text-[var(--muted-foreground)] w-1/4">Metric</th>
+                <th class="p-3 font-bold text-blue-400 w-1/4" id="th-slot-1">Model 1</th>
+                <th class="p-3 font-bold text-purple-400 w-1/4" id="th-slot-2">Model 2</th>
+                <th class="p-3 font-bold text-amber-400 w-1/4" id="th-slot-3">Model 3</th>
+              </tr>
+            </thead>
+            <tbody id="compare-table-body" class="divide-y divide-[var(--border)]">
+              <!-- Rendered by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Complete Master Reference Table -->
+    <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-5 shadow-sm space-y-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-base font-bold">Complete Non-API Model Ledger (Plan-Adjusted Quotas)</h2>
+          <p class="text-xs text-[var(--muted-foreground)]">Direct reference for all 20 models scaled to your active plan selection</p>
+        </div>
+        <span class="text-xs font-mono text-[var(--muted-foreground)]">Live Synced to Selected Plans</span>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-xs text-left border-collapse">
+          <thead>
+            <tr class="border-b border-[var(--border)] bg-[var(--background)]/50 text-[var(--muted-foreground)]">
+              <th class="p-2.5">Model Name</th>
+              <th class="p-2.5">Active Plan & Cost</th>
+              <th class="p-2.5">5h Rolling Quota</th>
+              <th class="p-2.5">Weekly Soft Cap</th>
+              <th class="p-2.5">Context Window</th>
+              <th class="p-2.5">Reasoning Overhead</th>
+              <th class="p-2.5">Lockout / Reset Rule</th>
+            </tr>
+          </thead>
+          <tbody id="master-table-body" class="divide-y divide-[var(--border)] font-mono">
+            <!-- Rendered by JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Footer Notes -->
+    <footer class="text-xs text-[var(--muted-foreground)] border-t border-[var(--border)] pt-4 space-y-2">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <p>
+          <strong>Standalone App:</strong> To launch anytime, run <code>open ~/.gemini/antigravity/scratch/model-quota-comparator/index.html</code> in Terminal or open in any browser.
+        </p>
+        <span class="text-[11px] text-[var(--muted-foreground)]">Version 2.4 • Fully Self-Contained</span>
+      </div>
+    </footer>
+
+  </div>
+
+  <script>
+    // Detailed Plan Specifications & Multipliers
+    const planConfigs = {
+      Google: {
+        free: {
+          name: "Google AI Free",
+          cost: "$0.00/mo",
+          costNum: 0,
+          mult: 0.25,
+          desc: "Limited 5-hour quota (~350k tok for Flash High); primarily suited for light queries with weekly throttles."
+        },
+        plus: {
+          name: "Google AI Plus ($4.99/mo)",
+          cost: "$4.99/mo",
+          costNum: 4.99,
+          mult: 0.5,
+          desc: "Entry tier: 2x Free limits with 400 GB cloud storage."
+        },
+        pro: {
+          name: "Google AI Pro ($19.99/mo)",
+          cost: "$19.99/mo",
+          costNum: 19.99,
+          mult: 1.0,
+          desc: "Standard Pro tier: 4x free limits, baseline 5h rolling quota (~1.4M tok Flash High, ~3.5M Low), 5 TB storage."
+        },
+        ultra_100: {
+          name: "Google AI Ultra 5x ($100.00/mo)",
+          cost: "$100.00/mo",
+          costNum: 100.0,
+          mult: 5.0,
+          desc: "Ultra 5x: 5x Pro limits (~7.0M tok Flash High), 20 TB storage, YouTube Premium & Antigravity priority queue."
+        },
+        ultra_200: {
+          name: "Google AI Ultra 20x ($200.00/mo)",
+          cost: "$200.00/mo",
+          costNum: 200.0,
+          mult: 20.0,
+          desc: "Top VIP Ultra: 20x Pro limits (~28.0M tok Flash High, ~70M Low), Project Genie, 30 TB storage & dedicated Antigravity compute."
+        },
+        enterprise: {
+          name: "Antigravity Enterprise ($35.00/mo)",
+          cost: "$35.00/mo",
+          costNum: 35.0,
+          mult: 3.5,
+          desc: "3.5x pooled quota with AI credit overage fallback for continuous agent workflows."
+        }
+      },
+      Anthropic: {
+        free: {
+          name: "Claude Free",
+          cost: "$0.00/mo",
+          costNum: 0,
+          mult: 0.15,
+          desc: "Strict message caps (~10-15 msgs / 5h). Opus 5.5 & Fable are locked or restricted to minimal trial turns."
+        },
+        pro: {
+          name: "Claude Pro ($20.00/mo)",
+          cost: "$20.00/mo",
+          costNum: 20.0,
+          mult: 1.0,
+          desc: "Standard 5-hour rolling session budget (~450k tok Opus 5.5, ~900k Sonnet). 1 Banked Reset included."
+        },
+        team: {
+          name: "Claude Team ($30.00/user/mo)",
+          cost: "$30.00/mo",
+          costNum: 30.0,
+          mult: 1.4,
+          desc: "1.4x usage allowance per member (~630k tok Opus 5.5), priority peak-hour routing & shared team billing."
+        },
+        max_100: {
+          name: "Claude Max 5x ($100.00/mo)",
+          cost: "$100.00/mo",
+          costNum: 100.0,
+          mult: 5.0,
+          desc: "Max 5x Tier: 5x Pro limits (~2.25M tok Opus 5.5 / 5h), 500k extended context, and 2 Banked Resets."
+        },
+        max_200: {
+          name: "Claude Max 20x ($200.00/mo)",
+          cost: "$200.00/mo",
+          costNum: 200.0,
+          mult: 20.0,
+          desc: "Top Power User Tier: 20x Pro capacity (~9.0M tok Opus 5.5, ~18.0M tok Sonnet 5), unconstrained Claude Code & agentic coding."
+        },
+        enterprise: {
+          name: "Claude Enterprise ($Custom)",
+          cost: "$Custom",
+          costNum: 250.0,
+          mult: 30.0,
+          desc: "Enterprise dedicated throughput (30x Pro limits), custom workspaces, and centralized admin governance."
+        }
+      },
+      OpenAI: {
+        free: {
+          name: "ChatGPT Free",
+          cost: "$0.00/mo",
+          costNum: 0,
+          mult: 0.1,
+          desc: "Restricted access. Sol is limited to few turns/day; Astra is unavailable; Terra operates with strict caps."
+        },
+        plus: {
+          name: "ChatGPT Plus ($20.00/mo)",
+          cost: "$20.00/mo",
+          costNum: 20.0,
+          mult: 1.0,
+          desc: "Standard tier: ~1.2M tokens for Sol, ~500k tokens for Astra in Work/Codex. 3-5h rolling resets."
+        },
+        business: {
+          name: "ChatGPT Business ($30.00/user/mo)",
+          cost: "$30.00/mo",
+          costNum: 30.0,
+          mult: 1.8,
+          desc: "1.8x Plus limits (~2.1M tok Sol, ~900k Astra). Dedicated workspace controls and team data privacy."
+        },
+        pro_100: {
+          name: "ChatGPT Pro 5x ($100.00/mo)",
+          cost: "$100.00/mo",
+          costNum: 100.0,
+          mult: 5.0,
+          desc: "5x Plus limits across models with dedicated compute."
+        },
+        pro_200: {
+          name: "ChatGPT Pro 20x ($200.00/mo)",
+          cost: "$200.00/mo",
+          costNum: 200.0,
+          mult: 20.0,
+          desc: "Frontier tier: Sol & Terra virtually uncapped; Astra 5-hour limit scaled 20x (~7.0M+ tokens) with unthrottled compute."
+        },
+        enterprise: {
+          name: "ChatGPT Enterprise ($Custom)",
+          cost: "$Custom",
+          costNum: 250.0,
+          mult: 30.0,
+          desc: "Unlimited high-speed frontier access, maximum context retention, and zero-retention data privacy guarantees."
+        }
+      }
+    };
+
+    // User's active selected plans with LocalStorage persistence
+    let currentPlans = {
+      Google: "ultra_200",
+      Anthropic: "max_200",
+      OpenAI: "pro_200"
+    };
+
+    // Base specifications for the 20 requested models (calibrated at 1.0x baseline)
+    const baseModels = [
+      // 1. Google Gemini in Antigravity
+      {
+        id: "gemini-3.8-flash-high",
+        name: "Gemini 3.8 Flash (High)",
+        provider: "Google",
+        category: "Reasoning",
+        platform: "Antigravity / Google AI Studio",
+        baseRolling5h: 1400000,
+        baseWeeklyCap: 9000000,
+        baseTurns5h: 25,
+        contextWindow: "1,048,576 tokens (1M)",
+        maxOutput: "65,536 tokens",
+        thinkingOverhead: "HIGH: Deep iterative planning & verification. Consumes 8k-32k thinking tokens/step directly from output budget.",
+        resetRule: "Continuous 5-hour rolling refresh window. If weekly ceiling hit, throttled or 5-day pause.",
+        badgeColor: "bg-blue-500/10 text-blue-400 border-blue-500/20",
+        notes: "Works harder than previous models; burns tokens faster due to recursive tool checks, but delivers superior first-pass accuracy in Antigravity."
+      },
+      {
+        id: "gemini-3.8-flash-low",
+        name: "Gemini 3.8 Flash (Low)",
+        provider: "Google",
+        category: "Standard/Low",
+        platform: "Antigravity / Google AI Studio",
+        baseRolling5h: 3500000,
+        baseWeeklyCap: 20000000,
+        baseTurns5h: 85,
+        contextWindow: "1,048,576 tokens (1M)",
+        maxOutput: "65,536 tokens",
+        thinkingOverhead: "LOW: Minimal thinking budget (1k-4k tokens). Fast execution with lightweight reasoning.",
+        resetRule: "Continuous 5-hour rolling refresh window. Very hard to hit weekly quota in normal usage.",
+        badgeColor: "bg-blue-500/10 text-blue-400 border-blue-500/20",
+        notes: "Super fast and quota-efficient. Ideal for high-turn workflows, repetitive file edits, and routine documentation queries."
+      },
+      {
+        id: "gemini-3.7-flash-high",
+        name: "Gemini 3.7 Flash (High)",
+        provider: "Google",
+        category: "Reasoning",
+        platform: "Antigravity / Google AI Studio",
+        baseRolling5h: 1600000,
+        baseWeeklyCap: 11000000,
+        baseTurns5h: 35,
+        contextWindow: "1,048,576 tokens (1M)",
+        maxOutput: "65,536 tokens",
+        thinkingOverhead: "HIGH: Robust multi-step reasoning. Output thinking tokens count against the generation ceiling.",
+        resetRule: "Continuous 5-hour rolling refresh window.",
+        badgeColor: "bg-cyan-500/10 text-cyan-400 border-cyan-500/20",
+        notes: "Highly stable reasoning tier with slightly fewer recursive loops than 3.8, extending quota life."
+      },
+      {
+        id: "gemini-3.7-flash-low",
+        name: "Gemini 3.7 Flash (Low)",
+        provider: "Google",
+        category: "Standard/Low",
+        platform: "Antigravity / Google AI Studio",
+        baseRolling5h: 4200000,
+        baseWeeklyCap: 24000000,
+        baseTurns5h: 110,
+        contextWindow: "1,048,576 tokens (1M)",
+        maxOutput: "65,536 tokens",
+        thinkingOverhead: "LOW: Low thinking budget (~2k tokens). Rapid single-turn output.",
+        resetRule: "Continuous 5-hour rolling refresh window.",
+        badgeColor: "bg-cyan-500/10 text-cyan-400 border-cyan-500/20",
+        notes: "Lightweight, highly responsive. Great fallback when rationing 5-hour quota during marathon coding days."
+      },
+      {
+        id: "gemini-3.6-flash-high",
+        name: "Gemini 3.6 Flash (High)",
+        provider: "Google",
+        category: "Reasoning",
+        platform: "Antigravity / Google AI Studio",
+        baseRolling5h: 2200000,
+        baseWeeklyCap: 14000000,
+        baseTurns5h: 50,
+        contextWindow: "1,048,576 tokens (1M)",
+        maxOutput: "65,536 tokens",
+        thinkingOverhead: "HIGH: 3.6 reasoning architecture. Balanced thinking token budget.",
+        resetRule: "Continuous 5-hour rolling refresh window.",
+        badgeColor: "bg-teal-500/10 text-teal-400 border-teal-500/20",
+        notes: "Prior generation Flash reasoning; consumes less quota than 3.8 but lacks newer autonomous heuristics."
+      },
+      {
+        id: "gemini-3.6-flash-low",
+        name: "Gemini 3.6 Flash (Low)",
+        provider: "Google",
+        category: "Standard/Low",
+        platform: "Antigravity / Google AI Studio",
+        baseRolling5h: 5500000,
+        baseWeeklyCap: 30000000,
+        baseTurns5h: 150,
+        contextWindow: "1,048,576 tokens (1M)",
+        maxOutput: "65,536 tokens",
+        thinkingOverhead: "LOW: Bare-minimum reasoning overhead. Maximal raw token volume.",
+        resetRule: "Continuous 5-hour rolling refresh window.",
+        badgeColor: "bg-teal-500/10 text-teal-400 border-teal-500/20",
+        notes: "Highest raw volume throughput in Antigravity for bulk operations, regex rewrites, and file sweeps."
+      },
+
+      // 2. Anthropic Claude Family
+      {
+        id: "claude-opus-5-5-standard",
+        name: "Claude Opus 5.5 (Standard)",
+        provider: "Anthropic",
+        category: "Standard/Low",
+        platform: "Claude.ai / Claude Code",
+        baseRolling5h: 450000,
+        baseWeeklyCap: 2500000,
+        baseTurns5h: 55,
+        contextWindow: "200,000 tokens (500k in Max)",
+        maxOutput: "16,384 tokens",
+        thinkingOverhead: "STANDARD: Highly concise and token-efficient. Stretches ~25% further than Opus 5.",
+        resetRule: "Rolling 5-hour window + Banked Rate-Limit Reset (save 1-2 resets to trigger on demand).",
+        badgeColor: "bg-purple-500/10 text-purple-400 border-purple-500/20",
+        notes: "Released Sept 22, 2026. Flagship enterprise workhorse with 40% cost efficiency gain over Opus 5. Features banked reset for Pro/Max users."
+      },
+      {
+        id: "claude-opus-5-5-reasoning",
+        name: "Claude Opus 5.5 (Adaptive Reasoning)",
+        provider: "Anthropic",
+        category: "Reasoning",
+        platform: "Claude.ai / Claude Code",
+        baseRolling5h: 280000,
+        baseWeeklyCap: 1500000,
+        baseTurns5h: 30,
+        contextWindow: "200,000 tokens (500k in Max)",
+        maxOutput: "16,384 tokens",
+        thinkingOverhead: "REASONING: Adaptive thinking enabled. Dynamically scales thinking tokens based on puzzle complexity.",
+        resetRule: "Rolling 5-hour session budget + Banked Rate-Limit Reset.",
+        badgeColor: "bg-purple-500/10 text-purple-400 border-purple-500/20",
+        notes: "Phenomenal architectural synthesis and deep logic. On Claude Max 20x, allows massive multi-hour deep thinking without hitting limits."
+      },
+      {
+        id: "claude-opus-5-standard",
+        name: "Claude Opus 5 (Standard)",
+        provider: "Anthropic",
+        category: "Standard/Low",
+        platform: "Claude.ai (Legacy Tier)",
+        baseRolling5h: 250000,
+        baseWeeklyCap: 1800000,
+        baseTurns5h: 40,
+        contextWindow: "200,000 tokens",
+        maxOutput: "8,192 tokens",
+        thinkingOverhead: "STANDARD: Moderate token consumption. Predecessor to Opus 5.5.",
+        resetRule: "Strict 5-hour rolling session limit without banked resets.",
+        badgeColor: "bg-violet-500/10 text-violet-400 border-violet-500/20",
+        notes: "Released July 2026. Now designated legacy; replaced by Opus 5.5 which is faster, cheaper, and has higher message quotas."
+      },
+      {
+        id: "claude-opus-5-reasoning",
+        name: "Claude Opus 5 (Extended Reasoning)",
+        provider: "Anthropic",
+        category: "Reasoning",
+        platform: "Claude.ai (Legacy Tier)",
+        baseRolling5h: 180000,
+        baseWeeklyCap: 1100000,
+        baseTurns5h: 20,
+        contextWindow: "200,000 tokens",
+        maxOutput: "8,192 tokens",
+        thinkingOverhead: "EXTENDED: Fixed thinking budget. Burns through 5-hour quota quickly on large file pastes.",
+        resetRule: "Strict 5-hour rolling limit.",
+        badgeColor: "bg-violet-500/10 text-violet-400 border-violet-500/20",
+        notes: "Legacy extended thinking. Hits 5-hour 'Session limit reached' message after ~20 deep engineering queries on Pro."
+      },
+      {
+        id: "claude-sonnet-5-standard",
+        name: "Claude Sonnet 5 (Standard)",
+        provider: "Anthropic",
+        category: "Standard/Low",
+        platform: "Claude.ai / Claude Code",
+        baseRolling5h: 900000,
+        baseWeeklyCap: 6000000,
+        baseTurns5h: 100,
+        contextWindow: "200,000 tokens",
+        maxOutput: "8,192 tokens",
+        thinkingOverhead: "STANDARD: Very fast and quota-generous. Default daily driver.",
+        resetRule: "Rolling 5-hour window.",
+        badgeColor: "bg-indigo-500/10 text-indigo-400 border-indigo-500/20",
+        notes: "Released June 2026. The balanced king of Claude.ai. Highest message allowance on Claude Pro and Max."
+      },
+      {
+        id: "claude-sonnet-5-reasoning",
+        name: "Claude Sonnet 5 (Adaptive Reasoning)",
+        provider: "Anthropic",
+        category: "Reasoning",
+        platform: "Claude.ai / Claude Code",
+        baseRolling5h: 550000,
+        baseWeeklyCap: 3500000,
+        baseTurns5h: 50,
+        contextWindow: "200,000 tokens",
+        maxOutput: "8,192 tokens",
+        thinkingOverhead: "ADAPTIVE: Smart thinking enabled by default. Automatically scales back thinking tokens on easy prompts.",
+        resetRule: "Rolling 5-hour window.",
+        badgeColor: "bg-indigo-500/10 text-indigo-400 border-indigo-500/20",
+        notes: "Great balance of reasoning depth and quota preservation. Outperforms Opus 5 legacy on many coding benchmarks."
+      },
+      {
+        id: "claude-fable-5-1-standard",
+        name: "Claude Fable 5.1 (Standard)",
+        provider: "Anthropic",
+        category: "Standard/Low",
+        platform: "Claude.ai / Claude Code",
+        baseRolling5h: 320000,
+        baseWeeklyCap: 1600000,
+        baseTurns5h: 35,
+        contextWindow: "256,000 tokens",
+        maxOutput: "16,384 tokens",
+        thinkingOverhead: "STANDARD: Frontier long-horizon agent. Token-hungry if allowed to rewrite entire files.",
+        resetRule: "Rolling 5-hour window.",
+        badgeColor: "bg-fuchsia-500/10 text-fuchsia-400 border-fuchsia-500/20",
+        notes: "Released Sept 1, 2026. Highly autonomous model designed for ambitious multi-hour software engineering. On $200 Max, can sustain deep agentic runs."
+      },
+      {
+        id: "claude-fable-5-1-reasoning",
+        name: "Claude Fable 5.1 (Deep Agentic Reasoning)",
+        provider: "Anthropic",
+        category: "Reasoning",
+        platform: "Claude.ai / Claude Code",
+        baseRolling5h: 200000,
+        baseWeeklyCap: 1000000,
+        baseTurns5h: 18,
+        contextWindow: "256,000 tokens",
+        maxOutput: "16,384 tokens",
+        thinkingOverhead: "DEEP AGENTIC: Extreme reasoning depth and self-correction loops. Very token intensive.",
+        resetRule: "Strict 5-hour rolling cap on Pro. On Max 20x ($200), provides ~4M tokens / 5h (~350 turns).",
+        badgeColor: "bg-fuchsia-500/10 text-fuchsia-400 border-fuchsia-500/20",
+        notes: "Anthropic's most ambitious reasoning model for scientific research and complex system architecture."
+      },
+
+      // 3. OpenAI GPT-6 Lineup
+      {
+        id: "gpt-6-sol-standard",
+        name: "GPT-6 Sol (Standard)",
+        provider: "OpenAI",
+        category: "Standard/Low",
+        platform: "ChatGPT Work / Codex",
+        baseRolling5h: 1200000,
+        baseWeeklyCap: 8500000,
+        baseTurns5h: 95,
+        contextWindow: "500,000 tokens",
+        maxOutput: "32,768 tokens",
+        thinkingOverhead: "STANDARD: Highly optimized, 50% lower cost architecture than GPT-5.6 predecessors.",
+        resetRule: "Dynamic 3-5 hour rate limit reset. Virtually uncapped on ChatGPT Pro ($200/mo).",
+        badgeColor: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+        notes: "Released Sept 22, 2026. High-volume, reliable professional model for everyday agentic coding in ChatGPT Work & Codex environments."
+      },
+      {
+        id: "gpt-6-sol-reasoning",
+        name: "GPT-6 Sol (High Reasoning)",
+        provider: "OpenAI",
+        category: "Reasoning",
+        platform: "ChatGPT Work / Codex",
+        baseRolling5h: 650000,
+        baseWeeklyCap: 4000000,
+        baseTurns5h: 40,
+        contextWindow: "500,000 tokens",
+        maxOutput: "32,768 tokens",
+        thinkingOverhead: "HIGH: Deep chain-of-thought verification. Reasoning tokens count towards prompt/completion cap.",
+        resetRule: "Dynamic 3-5 hour reset. Pro tier provides ~5x-20x headroom.",
+        badgeColor: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+        notes: "Excels at algorithmic refactoring and test-driven code writing with minimal hallucinations."
+      },
+      {
+        id: "gpt-6-astra-standard",
+        name: "GPT-6 Astra (Standard)",
+        provider: "OpenAI",
+        category: "Standard/Low",
+        platform: "ChatGPT Plus / Pro / Desktop",
+        baseRolling5h: 500000,
+        baseWeeklyCap: 2800000,
+        baseTurns5h: 40,
+        contextWindow: "1,050,000 tokens (1.05M)",
+        maxOutput: "65,536 tokens",
+        thinkingOverhead: "STANDARD: Flagship frontier model. Large base compute footprint.",
+        resetRule: "Strict 5-hour rolling cap on Plus; Pro tier ($200) grants high priority unthrottled access.",
+        badgeColor: "bg-amber-500/10 text-amber-400 border-amber-500/20",
+        notes: "Released Sept 3, 2026. OpenAI's supreme frontier intelligence model. 1.05M context window enables entire code repositories in-context."
+      },
+      {
+        id: "gpt-6-astra-reasoning",
+        name: "GPT-6 Astra (Agentic Reasoning / Computer-Use)",
+        provider: "OpenAI",
+        category: "Reasoning",
+        platform: "ChatGPT Plus / Pro / Desktop",
+        baseRolling5h: 350000,
+        baseWeeklyCap: 1500000,
+        baseTurns5h: 20,
+        contextWindow: "1,050,000 tokens (1.05M)",
+        maxOutput: "65,536 tokens",
+        thinkingOverhead: "EXTREME: Full computer-use planning and visual inspection tokens. Heavy token draw per step.",
+        resetRule: "Fastest model to trigger 5-hour Plus caps. Pro $200 tier expands quota 20x to ~7.0M tokens.",
+        badgeColor: "bg-amber-500/10 text-amber-400 border-amber-500/20",
+        notes: "Acts as a full computer operator (screen viewing, CLI invocation, end-to-end debugging). Very token-intensive."
+      },
+      {
+        id: "gpt-6-terra-standard",
+        name: "GPT-6 Terra (Standard)",
+        provider: "OpenAI",
+        category: "Standard/Low",
+        platform: "ChatGPT Plus / Team",
+        baseRolling5h: 800000,
+        baseWeeklyCap: 4500000,
+        baseTurns5h: 75,
+        contextWindow: "256,000 tokens",
+        maxOutput: "16,384 tokens",
+        thinkingOverhead: "STANDARD: Mid-tier speed model evolved from GPT-5.6 Terra architecture.",
+        resetRule: "Standard 3-5 hour reset interval.",
+        badgeColor: "bg-orange-500/10 text-orange-400 border-orange-500/20",
+        notes: "Transition model between GPT-5.6 and GPT-6 generations. Provides dependable everyday throughput for standard chat and coding assistance."
+      },
+      {
+        id: "gpt-6-terra-reasoning",
+        name: "GPT-6 Terra (Reasoning Mode)",
+        provider: "OpenAI",
+        category: "Reasoning",
+        platform: "ChatGPT Plus / Team",
+        baseRolling5h: 450000,
+        baseWeeklyCap: 2500000,
+        baseTurns5h: 35,
+        contextWindow: "256,000 tokens",
+        maxOutput: "16,384 tokens",
+        thinkingOverhead: "MODERATE: Step-by-step thinking for math and code verification.",
+        resetRule: "Standard 3-5 hour reset interval.",
+        badgeColor: "bg-orange-500/10 text-orange-400 border-orange-500/20",
+        notes: "Reasoning-enabled Terra variant. Strikes a comfortable middle ground between fast response and algorithmic precision without consuming Astra-level quota."
+      }
+    ];
+
+    let currentSelectedModelId = baseModels[0].id;
+    let activeProviderFilter = "all";
+    let activeReasoningFilter = "all";
+    let searchQuery = "";
+    let isCompareView = false;
+
+    // Local Storage Helpers
+    function saveState() {
+      try {
+        const state = {
+          plans: currentPlans,
+          selectedModelId: currentSelectedModelId,
+          turns: document.getElementById("sim-turns") ? document.getElementById("sim-turns").value : 25,
+          ctx: document.getElementById("sim-ctx") ? document.getElementById("sim-ctx").value : 50000,
+          providerFilter: activeProviderFilter,
+          reasoningFilter: activeReasoningFilter
+        };
+        localStorage.setItem("modelComparatorState_v2", JSON.stringify(state));
+      } catch (e) {
+        console.warn("LocalStorage save skipped:", e);
+      }
+    }
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem("modelComparatorState_v2");
+        if (raw) {
+          const state = JSON.parse(raw);
+          if (state.plans) currentPlans = { ...currentPlans, ...state.plans };
+          if (state.selectedModelId) currentSelectedModelId = state.selectedModelId;
+          if (state.providerFilter) activeProviderFilter = state.providerFilter;
+          if (state.reasoningFilter) activeReasoningFilter = state.reasoningFilter;
+          
+          if (document.getElementById("sim-turns") && state.turns) {
+            document.getElementById("sim-turns").value = state.turns;
+          }
+          if (document.getElementById("sim-ctx") && state.ctx) {
+            document.getElementById("sim-ctx").value = state.ctx;
+          }
+        }
+      } catch (e) {
+        console.warn("LocalStorage load error:", e);
+      }
+    }
+
+    function resetDefaults() {
+      localStorage.removeItem("modelComparatorState_v2");
+      currentPlans = { Google: "ultra_200", Anthropic: "max_200", OpenAI: "pro_200" };
+      currentSelectedModelId = baseModels[0].id;
+      activeProviderFilter = "all";
+      activeReasoningFilter = "all";
+      searchQuery = "";
+      document.getElementById("search-input").value = "";
+      applyPreset("max200");
+    }
+
+    // Helper: compute scaled model data based on active plans
+    function getComputedModel(baseM) {
+      const planKey = currentPlans[baseM.provider];
+      const planCfg = planConfigs[baseM.provider][planKey];
+      const mult = planCfg.mult;
+
+      const scaled5h = Math.round(baseM.baseRolling5h * mult);
+      const scaledWeekly = Math.round(baseM.baseWeeklyCap * mult);
+      const scaledTurns = Math.max(Math.round(baseM.baseTurns5h * mult), 3);
+
+      return {
+        ...baseM,
+        planName: planCfg.name,
+        planCost: planCfg.cost,
+        rolling5hTokens: scaled5h,
+        rolling5hDisplay: scaled5h >= 1000000 ? `~${(scaled5h/1000000).toFixed(1)}M tokens` : `~${Math.round(scaled5h/1000)}k tokens`,
+        typical5hTurns: `~${scaledTurns} turns / msgs`,
+        weeklyCapTokens: scaledWeekly,
+        weeklyCapDisplay: scaledWeekly >= 1000000 ? `~${(scaledWeekly/1000000).toFixed(1)}M tokens/wk` : `~${Math.round(scaledWeekly/1000)}k tokens/wk`
+      };
+    }
+
+    function getComputedModelsList() {
+      return baseModels.map(getComputedModel);
+    }
+
+    // Update Plan selection handler
+    function onPlanChange(provider) {
+      const selectId = `plan-select-${provider.toLowerCase()}`;
+      const val = document.getElementById(selectId).value;
+      currentPlans[provider] = val;
+
+      const cfg = planConfigs[provider][val];
+      document.getElementById(`plan-cost-${provider.toLowerCase()}`).textContent = cfg.cost;
+      document.getElementById(`plan-desc-${provider.toLowerCase()}`).textContent = cfg.desc;
+
+      updateCombinedCost();
+      renderModelCards();
+      renderInspector();
+      renderMasterTable();
+      if (isCompareView) updateCompareSlots();
+      runSimulation();
+      saveState();
+    }
+
+    // Quick presets
+    function applyPreset(preset) {
+      if (preset === 'max200') {
+        currentPlans = { Google: "ultra_200", Anthropic: "max_200", OpenAI: "pro_200" };
+      } else if (preset === 'tier100') {
+        currentPlans = { Google: "ultra_100", Anthropic: "max_100", OpenAI: "pro_100" };
+      } else if (preset === 'standard20') {
+        currentPlans = { Google: "pro", Anthropic: "pro", OpenAI: "plus" };
+      } else if (preset === 'team30') {
+        currentPlans = { Google: "enterprise", Anthropic: "team", OpenAI: "business" };
+      } else if (preset === 'free') {
+        currentPlans = { Google: "free", Anthropic: "free", OpenAI: "free" };
+      }
+
+      ['Google', 'Anthropic', 'OpenAI'].forEach(p => {
+        const sel = document.getElementById(`plan-select-${p.toLowerCase()}`);
+        sel.value = currentPlans[p];
+        const cfg = planConfigs[p][currentPlans[p]];
+        document.getElementById(`plan-cost-${p.toLowerCase()}`).textContent = cfg.cost;
+        document.getElementById(`plan-desc-${p.toLowerCase()}`).textContent = cfg.desc;
+      });
+
+      updateCombinedCost();
+      renderModelCards();
+      renderInspector();
+      renderMasterTable();
+      if (isCompareView) updateCompareSlots();
+      runSimulation();
+      saveState();
+    }
+
+    function updateCombinedCost() {
+      let total = 0;
+      let hasCustom = false;
+      ['Google', 'Anthropic', 'OpenAI'].forEach(p => {
+        const cfg = planConfigs[p][currentPlans[p]];
+        total += cfg.costNum;
+        if (cfg.cost.includes("Custom")) hasCustom = true;
+      });
+
+      const badge = document.getElementById("combined-cost-badge");
+      badge.textContent = `$${total.toFixed(2)} / month ${hasCustom ? '+ Custom Enterprise' : ''}`;
+    }
+
+    // Render Cards
+    function renderModelCards() {
+      const container = document.getElementById("model-cards-container");
+      container.innerHTML = "";
+
+      const models = getComputedModelsList();
+
+      const filtered = models.filter(m => {
+        const matchesProvider = activeProviderFilter === "all" || m.provider === activeProviderFilter;
+        const matchesReasoning = activeReasoningFilter === "all" || m.category === activeReasoningFilter;
+        const matchesSearch = searchQuery === "" || 
+          m.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          m.provider.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          m.platform.toLowerCase().includes(searchQuery.toLowerCase());
+        return matchesProvider && matchesReasoning && matchesSearch;
+      });
+
+      document.getElementById("model-count-label").textContent = `${filtered.length} of ${models.length} Models`;
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="p-6 text-center text-sm text-[var(--muted-foreground)]">No models matched your filter.</div>`;
+        return;
+      }
+
+      filtered.forEach(m => {
+        const isSelected = currentSelectedModelId === m.id;
+        const card = document.createElement("div");
+        card.className = `p-3.5 rounded-xl border cursor-pointer transition-all duration-150 ${
+          isSelected 
+            ? "bg-blue-500/10 border-blue-500 shadow-sm" 
+            : "bg-[var(--card)] border-[var(--border)] hover:border-blue-500/50 hover:bg-[var(--background)]"
+        }`;
+        card.onclick = () => selectModel(m.id);
+
+        card.innerHTML = `
+          <div class="flex items-start justify-between gap-2">
+            <div>
+              <div class="flex items-center gap-1.5 mb-1">
+                <span class="badge ${m.badgeColor}">${m.provider}</span>
+                <span class="text-[10px] text-emerald-400 font-mono font-semibold">${m.planCost}</span>
+              </div>
+              <h3 class="font-bold text-sm tracking-tight">${m.name}</h3>
+              <p class="text-xs text-[var(--muted-foreground)] mt-0.5">${m.platform}</p>
+            </div>
+            <div class="text-right font-mono">
+              <span class="text-xs font-semibold text-emerald-400 block">${m.rolling5hDisplay}</span>
+              <span class="text-[10px] text-[var(--muted-foreground)]">${m.typical5hTurns}</span>
+            </div>
+          </div>
+          <div class="mt-2.5 pt-2 border-t border-[var(--border)]/60 flex items-center justify-between text-[11px] text-[var(--muted-foreground)]">
+            <span>Ctx: <strong class="text-[var(--foreground)]">${m.contextWindow.split(' ')[0]}</strong></span>
+            <span>Plan: <strong class="text-[var(--foreground)]">${m.planName.split('(')[0]}</strong></span>
+            <span class="badge ${m.category === 'Reasoning' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'bg-slate-500/10 text-slate-400'}">${m.category}</span>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // Select Model to Inspect
+    function selectModel(id) {
+      currentSelectedModelId = id;
+      renderModelCards();
+      renderInspector();
+      runSimulation();
+      saveState();
+    }
+
+    // Render Detailed Inspector
+    function renderInspector() {
+      const baseM = baseModels.find(m => m.id === currentSelectedModelId) || baseModels[0];
+      const m = getComputedModel(baseM);
+      const el = document.getElementById("inspector-card");
+      document.getElementById("sim-model-name").textContent = `Simulating: ${m.name} (${m.planName.split('(')[0]})`;
+
+      el.innerHTML = `
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[var(--border)] pb-4">
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <span class="badge ${m.badgeColor}">${m.provider}</span>
+              <span class="badge ${m.category === 'Reasoning' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'bg-slate-500/10 text-slate-400 border border-slate-500/20'}">${m.category} Mode</span>
+              <span class="badge bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">${m.planName.split('(')[0]}</span>
+            </div>
+            <h2 class="text-xl sm:text-2xl font-bold tracking-tight">${m.name}</h2>
+            <p class="text-xs text-[var(--muted-foreground)] mt-0.5">${m.platform}</p>
+          </div>
+          <div class="text-left sm:text-right bg-[var(--background)] px-3.5 py-2 rounded-lg border border-[var(--border)]">
+            <div class="text-xs text-[var(--muted-foreground)]">Your Plan Cost:</div>
+            <div class="text-sm font-bold text-emerald-400 font-mono">${m.planCost}</div>
+          </div>
+        </div>
+
+        <!-- 4 Key Non-API Limit Stats -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono">
+          <div class="bg-[var(--background)] p-3 rounded-lg border border-[var(--border)]">
+            <span class="text-[10px] text-[var(--muted-foreground)] block uppercase tracking-wider">5h Rolling Quota</span>
+            <span class="text-sm font-bold text-blue-400 mt-1 block">${m.rolling5hDisplay}</span>
+            <span class="text-[10px] text-[var(--muted-foreground)]">${m.typical5hTurns}</span>
+          </div>
+
+          <div class="bg-[var(--background)] p-3 rounded-lg border border-[var(--border)]">
+            <span class="text-[10px] text-[var(--muted-foreground)] block uppercase tracking-wider">Weekly Soft Cap</span>
+            <span class="text-sm font-bold text-purple-400 mt-1 block">${m.weeklyCapDisplay}</span>
+            <span class="text-[10px] text-[var(--muted-foreground)]">Scaled to plan</span>
+          </div>
+
+          <div class="bg-[var(--background)] p-3 rounded-lg border border-[var(--border)]">
+            <span class="text-[10px] text-[var(--muted-foreground)] block uppercase tracking-wider">Context Window</span>
+            <span class="text-sm font-bold text-teal-400 mt-1 block">${m.contextWindow}</span>
+            <span class="text-[10px] text-[var(--muted-foreground)]">Max Out: ${m.maxOutput}</span>
+          </div>
+
+          <div class="bg-[var(--background)] p-3 rounded-lg border border-[var(--border)]">
+            <span class="text-[10px] text-[var(--muted-foreground)] block uppercase tracking-wider">Active Plan</span>
+            <span class="text-xs font-bold text-amber-400 mt-1 block truncate" title="${m.planName}">${m.planName.split('(')[0]}</span>
+            <span class="text-[10px] text-[var(--muted-foreground)]">Selected Tier</span>
+          </div>
+        </div>
+
+        <!-- Detailed Non-API Mechanics -->
+        <div class="space-y-3 text-xs">
+          <div class="bg-[var(--background)] p-3.5 rounded-lg border border-[var(--border)] space-y-1">
+            <h4 class="font-bold text-[var(--foreground)] flex items-center gap-1.5">
+              <span>🧠</span> Reasoning / Thinking Token Mechanics:
+            </h4>
+            <p class="text-[var(--muted-foreground)] leading-relaxed">${m.thinkingOverhead}</p>
+          </div>
+
+          <div class="bg-[var(--background)] p-3.5 rounded-lg border border-[var(--border)] space-y-1">
+            <h4 class="font-bold text-[var(--foreground)] flex items-center gap-1.5">
+              <span>🔄</span> Rate Limit Reset & Lockout Rules:
+            </h4>
+            <p class="text-[var(--muted-foreground)] leading-relaxed">${m.resetRule}</p>
+          </div>
+
+          <div class="bg-blue-500/5 p-3.5 rounded-lg border border-blue-500/20 space-y-1">
+            <h4 class="font-bold text-blue-400 flex items-center gap-1.5">
+              <span>💡</span> Non-API Real World Behavior & Tips:
+            </h4>
+            <p class="text-[var(--muted-foreground)] leading-relaxed">${m.notes}</p>
+          </div>
+        </div>
+      `;
+    }
+
+    // Workload Simulator calculation
+    function runSimulation() {
+      const turns = parseInt(document.getElementById("sim-turns").value);
+      const ctx = parseInt(document.getElementById("sim-ctx").value);
+      document.getElementById("sim-turns-val").textContent = turns;
+      document.getElementById("sim-ctx-val").textContent = (ctx >= 1000 ? (ctx/1000) + 'k' : ctx);
+
+      const baseM = baseModels.find(m => m.id === currentSelectedModelId) || baseModels[0];
+      const m = getComputedModel(baseM);
+      
+      let thinkingMultiplier = m.category === "Reasoning" ? 1.45 : 1.08;
+      if (m.id.includes("3.8-flash-high") || m.id.includes("fable-5-1-reasoning")) {
+        thinkingMultiplier = 1.75;
+      }
+
+      const totalTokens = Math.round(turns * (ctx * 0.4 + 4000) * thinkingMultiplier);
+      const quotaPct = Math.min(Math.round((totalTokens / m.rolling5hTokens) * 100), 200);
+
+      document.getElementById("sim-tokens-used").textContent = totalTokens.toLocaleString() + " tokens";
+      
+      const bar = document.getElementById("sim-progress-bar");
+      const status = document.getElementById("sim-budget-status");
+      const advice = document.getElementById("sim-advice");
+
+      bar.style.width = Math.min(quotaPct, 100) + "%";
+
+      if (quotaPct < 65) {
+        bar.className = "h-full bg-emerald-500 rounded-full transition-all duration-300";
+        status.className = "font-bold text-emerald-400";
+        status.textContent = `${quotaPct}% of ${m.planName.split('(')[0]} Budget (Safe)`;
+        advice.textContent = `✅ Safe operating range for your selected plan! Headroom is ample for continuous multi-step agent iterations.`;
+      } else if (quotaPct <= 99) {
+        bar.className = "h-full bg-amber-500 rounded-full transition-all duration-300";
+        status.className = "font-bold text-amber-400";
+        status.textContent = `${quotaPct}% of ${m.planName.split('(')[0]} Budget (Warning)`;
+        advice.textContent = `⚠️ Approaching 5-hour ceiling. Consider asking for concise diffs from the agent or switching to low-thinking mode.`;
+      } else {
+        bar.className = "h-full bg-rose-500 rounded-full transition-all duration-300";
+        status.className = "font-bold text-rose-400";
+        status.textContent = `${quotaPct}% of ${m.planName.split('(')[0]} Budget (Cooldown Triggered)`;
+        advice.textContent = `🚨 Limit Exceeded! On your current ${m.planName.split('(')[0]} plan, this workload will trigger the 5-hour rolling lockout.`;
+      }
+    }
+
+    // Toggle main view
+    function toggleMainView() {
+      isCompareView = !isCompareView;
+      const gridView = document.getElementById("grid-view");
+      const compareView = document.getElementById("compare-view");
+      const btn = document.getElementById("toggle-view-btn");
+
+      if (isCompareView) {
+        gridView.classList.add("hidden");
+        compareView.classList.remove("hidden");
+        btn.textContent = "Single Model Inspector";
+        populateCompareSelectors();
+        updateCompareSlots();
+      } else {
+        gridView.classList.remove("hidden");
+        compareView.classList.add("hidden");
+        btn.textContent = "Head-to-Head Compare";
+      }
+    }
+
+    function populateCompareSelectors() {
+      const s1 = document.getElementById("slot-1-select");
+      const s2 = document.getElementById("slot-2-select");
+      const s3 = document.getElementById("slot-3-select");
+
+      const models = getComputedModelsList();
+      const optionsHtml = models.map(m => `<option value="${m.id}">${m.name}</option>`).join("");
+      s1.innerHTML = optionsHtml;
+      s2.innerHTML = optionsHtml;
+      s3.innerHTML = optionsHtml;
+
+      s1.value = "gemini-3.8-flash-high";
+      s2.value = "claude-opus-5-5-reasoning";
+      s3.value = "gpt-6-sol-reasoning";
+    }
+
+    function updateCompareSlots() {
+      const id1 = document.getElementById("slot-1-select").value || "gemini-3.8-flash-high";
+      const id2 = document.getElementById("slot-2-select").value || "claude-opus-5-5-reasoning";
+      const id3 = document.getElementById("slot-3-select").value || "gpt-6-sol-reasoning";
+
+      const b1 = baseModels.find(m => m.id === id1) || baseModels[0];
+      const b2 = baseModels.find(m => m.id === id2) || baseModels[6];
+      const b3 = baseModels.find(m => m.id === id3) || baseModels[14];
+
+      const m1 = getComputedModel(b1);
+      const m2 = getComputedModel(b2);
+      const m3 = getComputedModel(b3);
+
+      document.getElementById("th-slot-1").textContent = m1.name;
+      document.getElementById("th-slot-2").textContent = m2.name;
+      document.getElementById("th-slot-3").textContent = m3.name;
+
+      const metrics = [
+        { label: "Provider & Platform", f: m => `${m.provider} (${m.platform})` },
+        { label: "Active Plan & Cost", f: m => `<strong class="text-emerald-400 font-mono">${m.planCost}</strong><br><span class="text-[10px] text-[var(--muted-foreground)]">${m.planName}</span>` },
+        { label: "5-Hour Rolling Token Quota", f: m => `<strong class="text-blue-400 font-mono">${m.rolling5hDisplay}</strong><br><span class="text-[10px] text-[var(--muted-foreground)]">${m.typical5hTurns}</span>` },
+        { label: "Weekly Fair-Use Ceiling", f: m => `<strong class="text-purple-400 font-mono">${m.weeklyCapDisplay}</strong>` },
+        { label: "Context Window / Max Output", f: m => `Context: ${m.contextWindow}<br>Output: ${m.maxOutput}` },
+        { label: "Thinking & Reasoning Overhead", f: m => `<span class="badge ${m.category === 'Reasoning' ? 'bg-amber-500/10 text-amber-400' : 'bg-slate-500/10 text-slate-400'}">${m.category}</span><p class="mt-1 text-[11px] text-[var(--muted-foreground)]">${m.thinkingOverhead}</p>` },
+        { label: "Lockout & Reset Mechanism", f: m => `<span class="text-[11px] text-[var(--muted-foreground)]">${m.resetRule}</span>` },
+        { label: "Key Non-API Notes", f: m => `<span class="text-[11px] text-[var(--muted-foreground)]">${m.notes}</span>` }
+      ];
+
+      const tbody = document.getElementById("compare-table-body");
+      tbody.innerHTML = metrics.map(row => `
+        <tr class="hover:bg-[var(--background)]/40 transition">
+          <td class="p-3 font-semibold text-[var(--foreground)] border-r border-[var(--border)] align-top">${row.label}</td>
+          <td class="p-3 align-top border-r border-[var(--border)]">${row.f(m1)}</td>
+          <td class="p-3 align-top border-r border-[var(--border)]">${row.f(m2)}</td>
+          <td class="p-3 align-top">${row.f(m3)}</td>
+        </tr>
+      `).join("");
+    }
+
+    // Render Master Ledger
+    function renderMasterTable() {
+      const tbody = document.getElementById("master-table-body");
+      const models = getComputedModelsList();
+
+      tbody.innerHTML = models.map(m => `
+        <tr class="hover:bg-[var(--background)] transition cursor-pointer" onclick="selectModel('${m.id}'); if(isCompareView) toggleMainView();">
+          <td class="p-2.5 font-bold text-[var(--foreground)]">
+            <span class="badge ${m.badgeColor} mr-1">${m.provider[0]}</span>
+            ${m.name}
+          </td>
+          <td class="p-2.5 text-emerald-400">${m.planCost}</td>
+          <td class="p-2.5 text-blue-400 font-semibold">${m.rolling5hDisplay}</td>
+          <td class="p-2.5 text-purple-400">${m.weeklyCapDisplay.split(' ')[0]}</td>
+          <td class="p-2.5 text-[var(--muted-foreground)]">${m.contextWindow.split(' ')[0]}</td>
+          <td class="p-2.5">
+            <span class="badge ${m.category === 'Reasoning' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'bg-slate-500/10 text-slate-400'}">
+              ${m.category}
+            </span>
+          </td>
+          <td class="p-2.5 text-[10px] text-[var(--muted-foreground)] max-w-xs truncate" title="${m.resetRule}">
+            ${m.resetRule}
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    // Filter controls
+    function setProviderFilter(prov) {
+      activeProviderFilter = prov;
+      document.querySelectorAll(".provider-btn").forEach(btn => {
+        if (btn.textContent.trim().toLowerCase() === prov.toLowerCase()) {
+          btn.className = "provider-btn active px-2.5 py-1 rounded bg-blue-600 text-white font-semibold";
+        } else {
+          btn.className = "provider-btn px-2.5 py-1 rounded text-[var(--muted-foreground)] hover:text-[var(--foreground)]";
+        }
+      });
+      renderModelCards();
+      saveState();
+    }
+
+    function setReasoningFilter(mode) {
+      activeReasoningFilter = mode;
+      document.querySelectorAll(".reason-btn").forEach(btn => {
+        if (
+          (mode === "all" && btn.textContent.includes("All")) ||
+          (mode === "Reasoning" && btn.textContent.includes("Reasoning")) ||
+          (mode === "Standard/Low" && btn.textContent.includes("Standard"))
+        ) {
+          btn.className = "reason-btn active px-2.5 py-1 rounded bg-blue-600 text-white font-semibold";
+        } else {
+          btn.className = "reason-btn px-2.5 py-1 rounded text-[var(--muted-foreground)] hover:text-[var(--foreground)]";
+        }
+      });
+      renderModelCards();
+      saveState();
+    }
+
+    function handleSearch() {
+      searchQuery = document.getElementById("search-input").value;
+      renderModelCards();
+    }
+
+    // Initialize with state restoration
+    window.addEventListener("DOMContentLoaded", () => {
+      loadState();
+
+      // Sync select elements with loaded state
+      ['Google', 'Anthropic', 'OpenAI'].forEach(p => {
+        const sel = document.getElementById(`plan-select-${p.toLowerCase()}`);
+        if (sel && currentPlans[p]) {
+          sel.value = currentPlans[p];
+          const cfg = planConfigs[p][currentPlans[p]];
+          document.getElementById(`plan-cost-${p.toLowerCase()}`).textContent = cfg.cost;
+          document.getElementById(`plan-desc-${p.toLowerCase()}`).textContent = cfg.desc;
+        }
+      });
+
+      updateCombinedCost();
+      setProviderFilter(activeProviderFilter);
+      setReasoningFilter(activeReasoningFilter);
+      renderModelCards();
+      renderInspector();
+      renderMasterTable();
+      runSimulation();
+    });
+  </script>
+</body>
+</html>
