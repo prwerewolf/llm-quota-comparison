@@ -36,3 +36,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Integrated Instruction Following (IFEval), Context Recall (NIAH), and LiveCodeBench scores into the model comparator.
 - Added explanatory hover tooltips (using native `title` and CSS dashed underlines) to all 6 Vibe Coding evaluation metrics in the Inspector and Compare views.
+
+## [1.4.0] - 2026-09-25
+
+### Added
+- Added "🏆 BEST" dynamic highlighting to the Head-to-Head Compare table. The view now automatically calculates and highlights the top-scoring model for each of the 6 Vibe Coding evaluation metrics, dimming the losing scores to make comparisons instantly readable.

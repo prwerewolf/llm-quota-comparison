@@ -1436,18 +1436,28 @@
       document.getElementById("th-slot-2").textContent = m2.name;
       document.getElementById("th-slot-3").textContent = m3.name;
 
+
+      const renderScore = (m, key, colorClass, label, unit) => {
+        const val = m[key];
+        const maxVal = Math.max(m1[key], m2[key], m3[key]);
+        const isWinner = val === maxVal;
+        const badge = isWinner ? `<span class="ml-2 inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20 shadow-sm leading-none tracking-wide">🏆 BEST</span>` : '';
+        const weightClass = isWinner ? 'font-black opacity-100' : 'font-semibold opacity-60';
+        return `<div class="flex items-center mt-1"><strong class="${colorClass} text-sm ${weightClass}">${val}${unit}</strong>${badge}</div><div class="text-[10px] text-[var(--muted-foreground)] mt-0.5">${label}</div>`;
+      };
+
       const metrics = [
         { label: "Provider & Platform", f: m => `${m.provider} (${m.platform})` },
         { label: "Active Plan & Cost", f: m => `<strong class="text-emerald-400 font-mono">${m.planCost}</strong><br><span class="text-[10px] text-[var(--muted-foreground)]">${m.planName}</span>` },
         { label: "5-Hour Rolling Token Quota", f: m => `<strong class="text-blue-400 font-mono">${m.rolling5hDisplay}</strong><br><span class="text-[10px] text-[var(--muted-foreground)]">${m.typical5hTurns}</span>` },
         { label: "Weekly Fair-Use Ceiling", f: m => `<strong class="text-purple-400 font-mono">${m.weeklyCapDisplay}</strong>` },
         { label: "Context Window / Max Output", f: m => `Context: ${m.contextWindow}<br>Output: ${m.maxOutput}` },
-        { label: `<span class="cursor-help border-b border-dashed border-[var(--muted-foreground)]/50" title="SWE-bench Verified: Measures if the model can autonomously resolve real-world GitHub issues. Higher = fewer logic bugs.">SWE-bench Verified</span>`, f: m => `<strong class="text-blue-400 text-sm">${m.sweBench}%</strong><div class="text-[10px] text-[var(--muted-foreground)]">Autonomy</div>` },
-        { label: `<span class="cursor-help border-b border-dashed border-[var(--muted-foreground)]/50" title="Chatbot Arena Coding: A blind A/B testing leaderboard based on human preference. Higher = better 'vibes' and intuition.">Arena Coding Elo</span>`, f: m => `<strong class="text-purple-400 text-sm">${m.arenaCoding}</strong><div class="text-[10px] text-[var(--muted-foreground)]">Human Pref</div>` },
-        { label: `<span class="cursor-help border-b border-dashed border-[var(--muted-foreground)]/50" title="Aider Code Edit: Measures how cleanly a model can jump into an existing file and apply a refactor without breaking syntax.">Aider Code Edit</span>`, f: m => `<strong class="text-emerald-400 text-sm">${m.aiderEdit}%</strong><div class="text-[10px] text-[var(--muted-foreground)]">Refactoring</div>` },
-        { label: `<span class="cursor-help border-b border-dashed border-[var(--muted-foreground)]/50" title="Instruction Following (IFEval): Prevents 'laziness'. Measures if the model obeys explicit constraints (e.g., 'only output the changed function').">Instruction Following</span>`, f: m => `<strong class="text-amber-400 text-sm">${m.ifEval}%</strong><div class="text-[10px] text-[var(--muted-foreground)]">Obedience</div>` },
-        { label: `<span class="cursor-help border-b border-dashed border-[var(--muted-foreground)]/50" title="Long-Context Recall (NIAH): Measures if the model actually remembers code pasted into the middle of a massive context window without hallucinating.">Context Recall</span>`, f: m => `<strong class="text-rose-400 text-sm">${m.recallScore}%</strong><div class="text-[10px] text-[var(--muted-foreground)]">Memory</div>` },
-        { label: `<span class="cursor-help border-b border-dashed border-[var(--muted-foreground)]/50" title="LiveCodeBench: Tests models on brand-new programming problems to prove they are actually reasoning, not just regurgitating memorized training data.">LiveCodeBench</span>`, f: m => `<strong class="text-cyan-400 text-sm">${m.lcbScore}%</strong><div class="text-[10px] text-[var(--muted-foreground)]">Novel Logic</div>` },
+        { label: `<span class="cursor-help border-b border-dashed border-[var(--muted-foreground)]/50" title="SWE-bench Verified: Measures if the model can autonomously resolve real-world GitHub issues. Higher = fewer logic bugs.">SWE-bench Verified</span>`, f: m => renderScore(m, "sweBench", "text-blue-400", "Autonomy", "%") },
+        { label: `<span class="cursor-help border-b border-dashed border-[var(--muted-foreground)]/50" title="Chatbot Arena Coding: A blind A/B testing leaderboard based on human preference. Higher = better 'vibes' and intuition.">Arena Coding Elo</span>`, f: m => renderScore(m, "arenaCoding", "text-purple-400", "Human Pref", "") },
+        { label: `<span class="cursor-help border-b border-dashed border-[var(--muted-foreground)]/50" title="Aider Code Edit: Measures how cleanly a model can jump into an existing file and apply a refactor without breaking syntax.">Aider Code Edit</span>`, f: m => renderScore(m, "aiderEdit", "text-emerald-400", "Refactoring", "%") },
+        { label: `<span class="cursor-help border-b border-dashed border-[var(--muted-foreground)]/50" title="Instruction Following (IFEval): Prevents 'laziness'. Measures if the model obeys explicit constraints (e.g., 'only output the changed function').">Instruction Following</span>`, f: m => renderScore(m, "ifEval", "text-amber-400", "Obedience", "%") },
+        { label: `<span class="cursor-help border-b border-dashed border-[var(--muted-foreground)]/50" title="Long-Context Recall (NIAH): Measures if the model actually remembers code pasted into the middle of a massive context window without hallucinating.">Context Recall</span>`, f: m => renderScore(m, "recallScore", "text-rose-400", "Memory", "%") },
+        { label: `<span class="cursor-help border-b border-dashed border-[var(--muted-foreground)]/50" title="LiveCodeBench: Tests models on brand-new programming problems to prove they are actually reasoning, not just regurgitating memorized training data.">LiveCodeBench</span>`, f: m => renderScore(m, "lcbScore", "text-cyan-400", "Novel Logic", "%") },
         { label: "Thinking & Reasoning Overhead", f: m => `<span class="badge ${m.category === 'Reasoning' ? 'bg-amber-500/10 text-amber-400' : 'bg-slate-500/10 text-slate-400'}">${m.category}</span><p class="mt-1 text-[11px] text-[var(--muted-foreground)]">${m.thinkingOverhead}</p>` },
         { label: "Lockout & Reset Mechanism", f: m => `<span class="text-[11px] text-[var(--muted-foreground)]">${m.resetRule}</span>` },
         { label: "Key Non-API Notes", f: m => `<span class="text-[11px] text-[var(--muted-foreground)]">${m.notes}</span>` }
