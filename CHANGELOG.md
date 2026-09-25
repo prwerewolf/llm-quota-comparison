@@ -13,3 +13,12 @@ All notable changes to this project will be documented in this file.
 - `localStorage` automatic state persistence.
 - Double-clickable macOS `launch.command` script.
 - In-depth non-API comparative guide (`GUIDE.md`).
+
+## [1.1.0] - 2026-09-25
+
+### Added
+- Added Gemini 3.1 Pro (High and Low) to the comparator.
+
+### Fixed
+- Corrected late 2026 model limits based on live data (Opus 5.5, Sonnet 5, Fable 5.1 context updated to 1M with 128k output).
+- Corrected GPT-6 models (Sol, Astra, Terra) context updated to 1.05M with 128k output.
